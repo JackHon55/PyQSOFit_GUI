@@ -1,0 +1,9 @@
+C:\Users\User\ForGithub\PyQSOFit_SBLg\obj\x86\Debug\PyQSOFit_SBLg.csproj.AssemblyReference.cache
+C:\Users\User\ForGithub\PyQSOFit_SBLg\obj\x86\Debug\PyQSOFit_SBLg.csproj.GenerateResource.cache
+C:\Users\User\ForGithub\PyQSOFit_SBLg\obj\x86\Debug\PyQSOFit_SBLg.csproj.CoreCompileInputs.cache
+C:\Users\User\ForGithub\PyQSOFit_SBLg\bin\Debug\WindowsApplication.exe.config
+C:\Users\User\ForGithub\PyQSOFit_SBLg\bin\Debug\WindowsApplication.exe
+C:\Users\User\ForGithub\PyQSOFit_SBLg\bin\Debug\WindowsApplication.pdb
+C:\Users\User\ForGithub\PyQSOFit_SBLg\obj\x86\Debug\WindowsApplication.exe
+C:\Users\User\ForGithub\PyQSOFit_SBLg\obj\x86\Debug\WindowsApplication.pdb
+C:\Users\User\ForGithub\PyQSOFit_SBLg\obj\x86\Debug\PyQSOFit_SBLg.Main.resources

@@ -1,0 +1,181 @@
+﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{785C5BAB-1FE7-4B01-B56E-79EFFA9F3941}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>WindowsApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>PyQSOFit_SBLg</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include=".idea\inspectionProfiles\profiles_settings.xml" />
+    <Content Include=".idea\misc.xml" />
+    <Content Include=".idea\modules.xml" />
+    <Content Include=".idea\vcs.xml" />
+    <Content Include=".idea\workspace.xml" />
+    <Content Include="6dfgs_fitting.py" />
+    <Content Include="Component_definitions.py" />
+    <Content Include="coord_format.py" />
+    <Content Include="date_format.py" />
+    <Content Include="fitting_plots\117250.png" />
+    <Content Include="fitting_plots\117270.png" />
+    <Content Include="fitting_plots\22878.png" />
+    <Content Include="fitting_plots\32928.png" />
+    <Content Include="fitting_plots\test.txt" />
+    <Content Include="fitting_results.txt" />
+    <Content Include="Luminosity_from_photometry.py" />
+    <Content Include="notes.txt" />
+    <Content Include="PyQSOFit\feII_UV_Mejia.txt" />
+    <Content Include="PyQSOFit\fe_optical.txt" />
+    <Content Include="PyQSOFit\PyQSOFit_SVL.py" />
+    <Content Include="pythonProject\.idea\workspace.xml" />
+    <Content Include="rebin_spec.py" />
+    <Content Include="Redshift_matcher.py" />
+    <Content Include="Spectra_handling\AllSpectrum.py" />
+    <Content Include="Spectra_handling\Spectrum_plotting.py" />
+    <Content Include="Spectra_handling\Spectrum_utls.py" />
+    <Content Include="spec_config.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".git\config" />
+    <None Include=".git\description" />
+    <None Include=".git\HEAD" />
+    <None Include=".git\hooks\applypatch-msg.sample" />
+    <None Include=".git\hooks\commit-msg.sample" />
+    <None Include=".git\hooks\fsmonitor-watchman.sample" />
+    <None Include=".git\hooks\post-update.sample" />
+    <None Include=".git\hooks\pre-applypatch.sample" />
+    <None Include=".git\hooks\pre-commit.sample" />
+    <None Include=".git\hooks\pre-merge-commit.sample" />
+    <None Include=".git\hooks\pre-push.sample" />
+    <None Include=".git\hooks\pre-rebase.sample" />
+    <None Include=".git\hooks\pre-receive.sample" />
+    <None Include=".git\hooks\prepare-commit-msg.sample" />
+    <None Include=".git\hooks\push-to-checkout.sample" />
+    <None Include=".git\hooks\update.sample" />
+    <None Include=".git\index" />
+    <None Include=".git\info\exclude" />
+    <None Include=".git\objects\10\5ce2da2d6447d11dfe32bfb846c3d5b199fc99" />
+    <None Include=".git\objects\3c\0cc7238e0de3c6289d51c0c3588eece6a11df9" />
+    <None Include=".git\objects\65\531ca992813bbfedbe43dfae5a5f4337168ed8" />
+    <None Include=".git\objects\94\a25f7f4cb416c083d265558da75d457237d671" />
+    <None Include=".git\objects\bd\d44f0940aa66395a1eaf8bb82b7656438fb728" />
+    <None Include=".git\objects\d0\876a78d06ac03b5d78c8dcdb95570281c6f1d6" />
+    <None Include=".git\objects\e6\9de29bb2d1d6434b8b29ae775ad8c2e48c5391" />
+    <None Include=".idea\PyQSOFit_SBLg.iml" />
+    <None Include=".vs\PyQSOFit_SBLg\FileContentIndex\c3b37ac7-a1a9-4ffc-83fe-187f4961ea32.vsidx" />
+    <None Include=".vs\PyQSOFit_SBLg\v17\.wsuo" />
+    <None Include=".vs\slnx.sqlite" />
+    <None Include=".vs\VSWorkspaceState.json" />
+    <None Include="app.config" />
+    <None Include="PyQSOFit\fe_op_lines.csv" />
+    <None Include="PyQSOFit\pca\gal_eigenspec_Yip2004.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_AZBIN4.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_AZBIN5.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_BZBIN2.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_BZBIN3.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_BZBIN4.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_BZBIN5.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_CZBIN1.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_CZBIN2.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_CZBIN3.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_CZBIN4.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_DZBIN1.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_DZBIN2.fits" />
+    <None Include="PyQSOFit\pca\qso_eigenspec_Yip2004_global.fits" />
+    <None Include="PyQSOFit\pca\spDR2-008.fit" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\gal_eigenspec_Yip2004.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_AZBIN4.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_AZBIN5.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_BZBIN2.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_BZBIN3.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_BZBIN4.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_BZBIN5.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_CZBIN1.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_CZBIN2.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_CZBIN3.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_CZBIN4.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_DZBIN1.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_DZBIN2.fits" />
+    <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_global.fits" />
+    <None Include="PyQSOFit\qsopar2.fits" />
+    <None Include="PyQSOFit\__pycache__\PyQSOFit_SVL.cpython-36.pyc" />
+    <None Include="PyQSOFit_SVL_Manual.pdf" />
+    <None Include="README.md" />
+    <None Include="Spectra_handling\Data\line_names.csv" />
+    <None Include="Spectra_handling\__pycache__\AllSpectrum.cpython-36.pyc" />
+    <None Include="Spectra_handling\__pycache__\Spectrum_utls.cpython-36.pyc" />
+    <None Include="test_spectra\0022878_1d.fits" />
+    <None Include="test_spectra\0023118_1d.fits" />
+    <None Include="test_spectra\0023945_1d.fits" />
+    <None Include="test_spectra\0024183_1d.fits" />
+    <None Include="test_spectra\0120365_1d.fits" />
+    <None Include="test_spectra_list.csv" />
+    <None Include="__pycache__\coord_format.cpython-36.pyc" />
+    <None Include="__pycache__\date_format.cpython-36.pyc" />
+    <None Include="__pycache__\rebin_spec.cpython-36.pyc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="fobject.cs" />
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".git\objects\info\" />
+    <Folder Include=".git\objects\pack\" />
+    <Folder Include=".git\refs\heads\" />
+    <Folder Include=".git\refs\tags\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>

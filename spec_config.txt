@@ -1,0 +1,5 @@
+C:\Users\User\ForGithub\PyQSOFit_SBLg\test_spectra\0022878_1d.fits
+22878
+0.06915
+4000
+7000
