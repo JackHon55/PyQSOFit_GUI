@@ -2,6 +2,8 @@ import numpy as np
 # import matplotlib
 
 # matplotlib.use('agg')
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS']='0'
 import matplotlib.pyplot as plt
 from Spectra_handling.AllSpectrum import *
 from Spectra_handling.Spectrum_utls import bpt_plotter, bpt_test, continuum_fitting
@@ -9,7 +11,7 @@ from PyQSOFit.PyQSOFit_SVL import *
 from rebin_spec import rebin_spec
 from scipy.signal import medfilt
 from tqdm import tqdm
-import os
+
 import warnings
 import pickle
 
@@ -143,12 +145,12 @@ class SixDFGSFitter:
         print(f'RES:{spec_id}\t{to_save}\n')
 
     def fit(self):
-        self.q = QSOFit(*self.output_spectrum, self.err, z=0, path=path1)
+        self.q = QSOFit(*self.output_spectrum, self.err, z=0, path=path1, config=path1+'qsopar2.fits')
         start = timeit.default_timer()
         self.q.Fit(name=self.spec_name, decomposition_host=True, PL=True, poly=True, Fe_uv_op=False, BC=True,
                    CFT_smooth=75, CFT=False, MC=False, MC_conti=False,
                    nsmooth=1, deredden=False, reject_badpix=False, redshift=False,
-                   initial_guess=None, n_trails=15, linefit=True, save_result=False, plot_fig=True, save_fig=True,
+                   n_trails=15, linefit=True, save_result=False, plot_fig=True, save_fig=True,
                    plot_line_name=True, plot_legend=True, dustmap_path=None,
                    save_fig_path=fig_path + str(self.spec_name), save_fits_path=None, save_fits_name=None)
 

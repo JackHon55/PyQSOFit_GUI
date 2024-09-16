@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<line>
+	<hbbroad>
+		<dname>Hb Broad</dname>
+		<lname>Hb_br</lname>
+		<lcen>4861.33</lcen>
+		<lscale>0.005</lscale>
+		<default>BEL</default>		
+	</hbbroad>
+
+	<hbnarrow>
+		<dname>Hb Narrow</dname>
+		<lname>Hb_na</lname>
+		<lcen>4861.33</lcen>
+		<lscale>0.002</lscale>
+		<lfwhm1>50</lfwhm1>
+		<lfwhm2>700</lfwhm2>
+		<lskew>0</lskew>
+		<lvoff>300</lvoff>
+		<vmode>Free</vmode>
+		<smode>Fixed</smode>
+	</hbnarrow>
+
+	<oiiir>
+		<dname>OIII5007</dname>
+		<lname>OIII5007c</lname>
+		<lcen>5006.84</lcen>
+		<lscale>0.003</lscale>
+		<default>NEL</default>
+	</oiiir>
+
+	<oiiil>
+		<dname>OIII4959</dname>
+		<lname>OIII4959c</lname>
+		<lcen>4958.91</lcen>
+		<lscale>0.003</lscale>
+		<default>NEL</default>
+	</oiiil>
+
+	<habroad>
+		<dname>Ha Broad</dname>
+		<lname>Ha_br</lname>
+		<lcen>6562.82</lcen>
+		<lscale>0.005</lscale>
+		<default>BEL</default>
+	</habroad>
+
+	<hanarrow>
+		<dname>Ha Narrow</dname>
+		<lname>Ha_nr</lname>
+		<lcen>6562.82</lcen>
+		<lscale>0.003</lscale>
+		<lfwhm1>50</lfwhm1>
+		<lfwhm2>700</lfwhm2>
+		<lskew>0</lskew>
+		<lvoff>300</lvoff>
+		<vmode>Free</vmode>
+		<smode>Fixed</smode>
+	</hanarrow>
+
+	<niir>
+		<dname>NII6585</dname>
+		<lname>NII6585c</lname>
+		<lcen>6583.46</lcen>
+		<lscale>0.003</lscale>
+		<default>NEL</default>
+	</niir>
+
+	<niil>
+		<dname>NII6549</dname>
+		<lname>NII6549c</lname>
+		<lcen>6548.05</lcen>
+		<lscale>0.003</lscale>
+		<default>NEL</default>
+	</niil>
+	
+	<defBEL>
+		<lfwhm1>1200</lfwhm1>
+		<lfwhm2>7000</lfwhm2>
+		<lskew>0</lskew>
+		<lvoff>1500</lvoff>
+		<vmode>Free</vmode>
+		<smode>Free</smode>
+	</defBEL>
+
+	<defNEL>
+		<lfwhm1>50</lfwhm1>
+		<lfwhm2>1200</lfwhm2>
+		<lskew>0</lskew>
+		<lvoff>300</lvoff>
+		<vmode>Free</vmode>
+		<smode>Fixed</smode>
+	</defNEL>
+</line>

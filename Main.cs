@@ -1,14 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
+using PyQSOFit_SBLg.Properties;
 
 namespace PyQSOFit_SBLg
 {
@@ -34,6 +32,7 @@ namespace PyQSOFit_SBLg
         public static Process PythonProcess;
         public static StreamWriter PythonInput;
         public static StreamReader PythonOutput;
+        string wkd = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\"));
 
         public Main()
         {
@@ -43,12 +42,34 @@ namespace PyQSOFit_SBLg
         private void Main_Load(object sender, EventArgs e)
         {
             Start_Python();
+            Setup_defaultConfig();
+        }
+
+        private void Setup_defaultConfig()
+        {
+            FlowLayoutPanel flow_defHb = new LineDef().SectionHeaderOBJ(0, Page_Default.Width, DropDown_Lines, "Default Hb");
+            FlowLayoutPanel flow_defHa = new LineDef().SectionHeaderOBJ(flow_defHb.Height, Page_Default.Width, DropDown_Lines, "Default Ha");
+            Page_Default.Controls.Add(flow_defHa);
+            Page_Default.Controls.Add(flow_defHb);
+
+            foreach (Control xobj in flow_defHa.Controls) xobj.Enabled = false;
+            foreach (Control xobj in flow_defHb.Controls) xobj.Enabled = false;
+
+            new DefaultLine(flow_defHb, "Hb");
+            new DefaultLine(flow_defHa, "Ha");
+
+
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             PythonInput.WriteLine("exit");
             PythonProcess.Close();
+            foreach (TabPage xpage in Tab_Lines.TabPages)
+            {
+                if (xpage.Tag != null)
+                { File.Delete(xpage.Tag.ToString()); }
+            }
         }
 
         private void Button_FileOpen_Click(object sender, EventArgs e)
@@ -59,7 +80,7 @@ namespace PyQSOFit_SBLg
             if (FileOpener.ShowDialog() == DialogResult.OK)
             {
                 Text_FilePath.Text = FileOpener.FileName;
-                Text_PropName.Text = System.IO.Path.GetFileName(FileOpener.FileName).Split('.')[0];
+                Text_PropName.Text = Path.GetFileName(FileOpener.FileName).Split('.')[0];
             }
 
         }
@@ -99,7 +120,7 @@ namespace PyQSOFit_SBLg
             {
                 FileName = "ipython",
                 Arguments = "--no-banner --no-confirm-exit",
-                WorkingDirectory = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\")),
+                WorkingDirectory = wkd,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
@@ -238,6 +259,79 @@ namespace PyQSOFit_SBLg
             Text_PropRedshift.Text = xobj.z.ToString();
             Text_PropFitRangeA.Text = xobj.trimA.ToString();
             Text_PropFitRangeB.Text = xobj.trimB.ToString();
+        }
+
+        private void addLineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem xmenu = sender as ToolStripMenuItem;
+            if (xmenu.GetCurrentParent() is ContextMenuStrip contextMenu)
+            {
+                if (contextMenu.SourceControl is FlowLayoutPanel xflow)
+                {
+                    new AddedLine(xflow);
+                }
+            }
+        }
+
+        private void Add_newdefinition(object sender, EventArgs e)
+        {
+            string xname = Interaction.InputBox("New line definition name:", "New line definitions", "LineGroup");
+            if (string.IsNullOrEmpty(xname))
+                return;
+            Tab_Lines.TabPages.Add(xname);
+            Tab_Lines.SelectTab(Tab_Lines.TabPages.Count - 1);
+            string tmpFilePath = Path.GetTempFileName();
+            Tab_Lines.SelectedTab.Tag = tmpFilePath;
+            Console.WriteLine(tmpFilePath);
+        }
+
+        private void Add_newSection(object sender, EventArgs e)
+        {
+            string xname = Interaction.InputBox("New section name:", "New section", "Hbeta");
+            if (string.IsNullOrEmpty(xname))
+                return;
+            int yloc = 0;
+            foreach (Control xobj in Tab_Lines.SelectedTab.Controls)
+            {
+                if (xobj is FlowLayoutPanel && xobj.Bottom > yloc) { yloc = xobj.Bottom; }
+            }
+
+            FlowLayoutPanel flow_new = new LineDef().SectionHeaderOBJ(yloc, Tab_Lines.SelectedTab.Width, DropDown_Lines, xname);
+            Tab_Lines.SelectedTab.Controls.Add(flow_new);
+        }
+
+        private void Button_SaveConfig_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog xsave = new SaveFileDialog();
+            if (xsave.ShowDialog() == DialogResult.OK)
+            {
+                string savefilename = xsave.FileName;
+                Construct_ConfigFile(savefilename);
+            }
+        }
+
+        private void Construct_ConfigFile(string savefile)
+        {
+            string[] xfile = File.ReadAllLines(Tab_Lines.SelectedTab.Tag.ToString());
+            string[] xtemplate = Resources.Component_template.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None); ;
+            List<string> to_save = xtemplate.ToList();
+            int markerIndex = to_save.IndexOf("# Insert here");
+            if (markerIndex != -1) { to_save.InsertRange(markerIndex, xfile.ToList()); }
+            File.WriteAllLines(savefile, to_save);
+        }
+
+        private void DropDown_Lines_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (Tab_Lines.SelectedIndex == 0)
+            {
+                toolStripMenuItem1.Enabled = false;
+                addLineToolStripMenuItem.Enabled = false;
+            }
+            else
+            {
+                toolStripMenuItem1.Enabled = true;
+                addLineToolStripMenuItem.Enabled = true;
+            }
         }
     }
 

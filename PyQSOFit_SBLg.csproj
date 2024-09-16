@@ -36,6 +36,7 @@
     <RootNamespace>PyQSOFit_SBLg</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -56,6 +57,9 @@
     <Content Include="Component_definitions.py" />
     <Content Include="coord_format.py" />
     <Content Include="date_format.py" />
+    <Content Include="Development_notes.txt" />
+    <Content Include="Resources\Component_template.txt" />
+    <Content Include="Resources\defLines.xml" />
     <Content Include="fitting_plots\117250.png" />
     <Content Include="fitting_plots\117270.png" />
     <Content Include="fitting_plots\22878.png" />
@@ -64,8 +68,11 @@
     <Content Include="fitting_results.txt" />
     <Content Include="Luminosity_from_photometry.py" />
     <Content Include="notes.txt" />
+    <Content Include="PyQSOFit\Components.py" />
+    <Content Include="PyQSOFit\Continuum.py" />
     <Content Include="PyQSOFit\feII_UV_Mejia.txt" />
     <Content Include="PyQSOFit\fe_optical.txt" />
+    <Content Include="PyQSOFit\Lines.py" />
     <Content Include="PyQSOFit\PyQSOFit_SVL.py" />
     <Content Include="pythonProject\.idea\workspace.xml" />
     <Content Include="rebin_spec.py" />
@@ -137,7 +144,6 @@
     <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_DZBIN1.fits" />
     <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_DZBIN2.fits" />
     <None Include="PyQSOFit\pca\Yip_pca_templates\qso_eigenspec_Yip2004_global.fits" />
-    <None Include="PyQSOFit\qsopar2.fits" />
     <None Include="PyQSOFit\__pycache__\PyQSOFit_SVL.cpython-36.pyc" />
     <None Include="PyQSOFit_SVL_Manual.pdf" />
     <None Include="README.md" />
@@ -155,17 +161,36 @@
     <None Include="__pycache__\rebin_spec.cpython-36.pyc" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddLine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddLine.Designer.cs">
+      <DependentUpon>AddLine.cs</DependentUpon>
+    </Compile>
     <Compile Include="fobject.cs" />
+    <Compile Include="LineDef.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AddLine.resx">
+      <DependentUpon>AddLine.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +198,7 @@
     <Folder Include=".git\objects\pack\" />
     <Folder Include=".git\refs\heads\" />
     <Folder Include=".git\refs\tags\" />
+    <Folder Include="fitting_configs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

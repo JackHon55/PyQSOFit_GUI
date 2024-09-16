@@ -1,0 +1,21 @@
+﻿Complete AddLines
+	- Allow to untick defaults <
+	- Complete Gamma functionality <
+	- Include all default lines <
+	- Fully support custom lines functionality <
+	- Add line linking UI
+
+Complete file saving
+	- Adding lines to sections <
+	- editing sections <
+	- Subtracting lines from sections <
+	- writing one section - missing writing all sections
+	- saving the file <
+	- deleting sections and tempfile
+
+Default page functions
+	- Set the default page to immutable <
+
+Integration
+	- Allow a list of saved configs to choose from
+	- Can open saved configs into the UI for tweaking and use etc
