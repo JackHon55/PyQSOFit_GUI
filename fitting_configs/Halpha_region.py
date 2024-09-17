@@ -11,14 +11,14 @@ hdr0 = fits.Header()
 hdr0['Author'] = 'Mol the Hrafn'
 primary_hdu = fits.PrimaryHDU(header=hdr0)
 
-# Save_info
-Hbeta_section = Section(section_name='Hbeta', start_range=4000, end_range=5500)
-line_Hb_br_1 = LineDef(l_name='Hb_br_1', l_center=4861.33, scale=0.005, default_bel=True)
-line_Hb_na_2 = LineDef(l_name='Hb_na_2', l_center=4861.33, scale=0.002, fwhm=(50, 700), voffset=300, vmode='', skew=(0,))
-line_OIII5007c_3 = LineDef(l_name='OIII5007c_3', l_center=5006.84, scale=0.003, default_nel=True)
-line_OIII4959c_4 = LineDef(l_name='OIII4959c_4', l_center=4958.91, scale=0.003, default_nel=True)
-Hbeta_section.add_lines([line_Hb_br_1,line_Hb_na_2,line_OIII5007c_3,line_OIII4959c_4])
-newdata = np.concatenate([Hbeta_section.lines])
+# Save_Halpha
+Halpha_section = Section(section_name='Halpha', start_range=6000, end_range=8000)
+line_Ha_br_1 = LineDef(l_name='Ha_br_1', l_center=6562.82, scale=0.005, fwhm=(1200, 10000), voffset=1500, vmode='', skew=(-10, 10))
+line_Ha_nr_2 = LineDef(l_name='Ha_nr_2', l_center=6562.82, scale=0.003, fwhm=(50, 700), voffset=300, vmode='', skew=(0,))
+line_NII6585c_3 = LineDef(l_name='NII6585c_3', l_center=6583.46, scale=0.003, fwhm=(50, 700), voffset=300, vmode='', skew=(-10, 10))
+line_NII6549c_4 = LineDef(l_name='NII6549c_4', l_center=6548.05, scale=0.003, fwhm=(50, 700), voffset=300, vmode='', skew=(-10, 10))
+Halpha_section.add_lines([line_Ha_br_1,line_Ha_nr_2,line_NII6585c_3,line_NII6549c_4])
+newdata = np.concatenate([Halpha_section.lines])
 # Insert here
 
 hdu1 = fits.BinTableHDU(data=newdata, header=Section.hdu_generate(), name='line_priors')

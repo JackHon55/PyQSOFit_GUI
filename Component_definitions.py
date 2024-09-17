@@ -96,9 +96,9 @@ hdr3['vary'] = 'Whether or not to vary the parameter (set to 0 to fix the contin
 hdu3 = fits.BinTableHDU(data=conti_priors, header=hdr3, name='conti_priors')
 
 # path definitions to save the component definitions file
-path1 = os.getcwd() + '/PyQSOFit/'  # the path of the source code file and qsopar.fits
+path1 = os.getcwd() + '/fitting_configs/'  # the path of the source code file and qsopar.fits
 hdu_list = fits.HDUList([primary_hdu, hdu1, hdu2, hdu3])
-hdu_list.writeto(path1 + 'qsopar2.fits', overwrite=True)
+hdu_list.writeto(path1 + 'Default.fits', overwrite=True)
 
 
 

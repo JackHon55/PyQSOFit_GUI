@@ -11,12 +11,12 @@ namespace PyQSOFit_SBLg
         public float trimB = 7000;
         public Dictionary<string, float> Dict_FitResult = new Dictionary<string, float>();
 
-        public void fit()
+        public void fit(string config_path)
         {
             Main.PythonInput.WriteLine($"spec_{spec_name} = SixDFGSFitter(file_path='{spec_path}', spec_name='{spec_name}', z={z})");
             Main.PythonInput.WriteLine($"spec_{spec_name}.reset_output_spectrum()");
             Main.PythonInput.WriteLine($"spec_{spec_name}.trim_spec(({trimA}, {trimB}))");
-            Main.PythonInput.WriteLine($"spec_{spec_name}.fit()");
+            Main.PythonInput.WriteLine($"spec_{spec_name}.fit('{config_path}')");
             Main.PythonInput.Flush();           
         }
 
@@ -25,6 +25,14 @@ namespace PyQSOFit_SBLg
             Main.PythonInput.WriteLine($"with open(spec_{spec_name}.plot_file, 'rb') as f: fig = pickle.load(f)");
             Main.PythonInput.WriteLine("plt.figure(fig.number)");
             Main.PythonInput.WriteLine("plt.show()");
+        }
+    }
+
+    public class Pypath
+    {
+        public static string T(string xpath)
+        {
+            return xpath.Replace("\\", "/");
         }
     }
 }

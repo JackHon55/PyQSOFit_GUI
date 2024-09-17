@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace PyQSOFit_SBLg
 {
@@ -14,10 +15,6 @@ namespace PyQSOFit_SBLg
     {
         int sec_width = 0;
         string sec_name = "";
-        public LineDef()
-        {
-
-        }
 
         public FlowLayoutPanel SectionHeaderOBJ(int yloc, int xwidth, ContextMenuStrip dropdown, string name = "Default Hb")
         {
@@ -42,12 +39,11 @@ namespace PyQSOFit_SBLg
         {
             get
             {
-                Button button_save = new Button
+                Label label_save = new Label
                 {
-                    Text = "Save",
-                    Width = (int)(0.2 * sec_width),
+                    Width = 0,
                     Font = new Font("Microsoft Sans Serif", 8),
-                    Name = $"Save_{sec_name}",
+                    Name = "Save_info",
                     BackColor = Color.Transparent,
                 };
                 Label secname = new Label
@@ -70,8 +66,7 @@ namespace PyQSOFit_SBLg
                 TextBox text_wave1 = new TextBox { Width = (int)(0.22 * sec_width) };
                 TextBox text_wave2 = new TextBox { Width = (int)(0.22 * sec_width) };
 
-                button_save.Click += SaveSection;
-                button_save.Tag = new List<Control> { text_secname, text_wave1, text_wave2 };
+                label_save.Tag = new List<Control> { text_secname, text_wave1, text_wave2 };
 
                 if (sec_name == "Default Hb")
                 {
@@ -87,95 +82,9 @@ namespace PyQSOFit_SBLg
                     text_wave2.Text = "7000";
                 }
 
-                return new List<Control> { secname, waverange, text_secname, text_wave1, text_wave2, button_save };
+                return new List<Control> { secname, waverange, text_secname, text_wave1, text_wave2, label_save };
             }          
-        }
-
-        private void SaveSection(object sender, EventArgs e)
-        {           
-            Button xsave = sender as Button;
-
-            if (xsave.BackColor == Color.Transparent)
-            {
-                SaveSection_initial(xsave);
-            }
-            else if (xsave.BackColor == Color.Green)
-            {
-                SaveSection_editing(xsave);
-                SaveSection_initial(xsave);
-            }
-            
-        }
-
-        private void SaveSection_initial(Button xsave)
-        {
-            List<Control> xtexts = xsave.Tag as List<Control>;
-            string sec_ini = $"{xtexts[0].Text}_section = Section(section_name='{xtexts[0].Text}', " +
-                $"start_range={xtexts[1].Text}, end_range={xtexts[2].Text})";
-
-            List<string> line_ini = new List<string>();
-            List<string> line_names = new List<string>();
-            foreach (Control xobj in xsave.Parent.Controls)
-            {
-                if (xobj is Button && xobj.Name.StartsWith("line"))
-                {
-                    line_ini.Add($"{xobj.Name} = {xobj.Tag}");
-                    line_names.Add(xobj.Name);
-                }
-            }
-            string line_into_sec = $"{xtexts[0].Text}_section.add_lines([{String.Join(",", line_names)}])";
-
-            List<string> sec_defs = new List<string>();
-            sec_defs.Add($"# {xsave.Name}");
-            sec_defs.Add(sec_ini);
-            sec_defs.AddRange(line_ini);
-            sec_defs.Add(line_into_sec);
-
-            File.AppendAllLines(xsave.Parent.Parent.Tag as string, sec_defs);
-            xsave.BackColor = Color.Green;
-        }
-
-        private void SaveSection_editing(Button xsave)
-        {
-            string[] xfile = File.ReadAllLines(xsave.Parent.Parent.Tag.ToString());
-            List<string> dump_lines = new List<string>();
-            List<string> keep_lines = new List<string>();
-            List<string> from_file = keep_lines;
-            foreach (string xline in xfile)
-            {
-                if (xline.Contains('#') && xline.Contains(xsave.Name))
-                {
-                    from_file = dump_lines;
-                }              
-                else if (xline.Contains('#'))
-                {
-                    from_file = keep_lines;
-                }
-                from_file.Add(xline);
-            }
-            File.WriteAllLines(xsave.Parent.Parent.Tag.ToString(), keep_lines);
-        }
-
-        private void Save_toFile(object sender, EventArgs e)
-        {
-            ProcessStartInfo xprocess_info = new ProcessStartInfo
-            {
-                FileName = "ipython",
-                WorkingDirectory = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\")),
-                UseShellExecute = false,
-                RedirectStandardInput = true,
-                CreateNoWindow = true,
-            };
-
-            Process xpython = new Process { StartInfo = xprocess_info };
-            xpython.Start();
-            StreamWriter xpython_in = xpython.StandardInput;
-            xpython_in.WriteLine("run Component_definitions.py");
-            xpython_in.Flush();
-            xpython_in.WriteLine("exit");
-            xpython.Close();
-        }
-
+        }      
     }
 
     public class LineObj

@@ -52,10 +52,15 @@
             this.DropDown_Lines = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newDefinitionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.addLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItem_addSection = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItem_addLine = new System.Windows.Forms.ToolStripMenuItem();
             this.Page_Default = new System.Windows.Forms.TabPage();
             this.Button_SaveConfig = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.Option_Config = new System.Windows.Forms.ComboBox();
+            this.Button_ConfigUpdate = new System.Windows.Forms.Button();
+            this.MenuItem_removeSection = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.Tab_Lines.SuspendLayout();
             this.DropDown_Lines.SuspendLayout();
             this.SuspendLayout();
@@ -239,9 +244,9 @@
             // 
             this.Button_ObjectAdd.Location = new System.Drawing.Point(258, 256);
             this.Button_ObjectAdd.Name = "Button_ObjectAdd";
-            this.Button_ObjectAdd.Size = new System.Drawing.Size(27, 23);
+            this.Button_ObjectAdd.Size = new System.Drawing.Size(63, 23);
             this.Button_ObjectAdd.TabIndex = 20;
-            this.Button_ObjectAdd.Text = "+";
+            this.Button_ObjectAdd.Text = "Update";
             this.Button_ObjectAdd.UseVisualStyleBackColor = true;
             this.Button_ObjectAdd.Click += new System.EventHandler(this.Button_ObjectAdd_Click);
             // 
@@ -260,10 +265,12 @@
             this.DropDown_Lines.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newDefinitionToolStripMenuItem,
             this.toolStripSeparator1,
-            this.toolStripMenuItem1,
-            this.addLineToolStripMenuItem});
+            this.MenuItem_addSection,
+            this.MenuItem_addLine,
+            this.toolStripSeparator2,
+            this.MenuItem_removeSection});
             this.DropDown_Lines.Name = "DropDown_Lines";
-            this.DropDown_Lines.Size = new System.Drawing.Size(181, 98);
+            this.DropDown_Lines.Size = new System.Drawing.Size(160, 104);
             this.DropDown_Lines.Opening += new System.ComponentModel.CancelEventHandler(this.DropDown_Lines_Opening);
             // 
             // newDefinitionToolStripMenuItem
@@ -278,19 +285,19 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
-            // toolStripMenuItem1
+            // MenuItem_addSection
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItem1.Text = "Add Section";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.Add_newSection);
+            this.MenuItem_addSection.Name = "MenuItem_addSection";
+            this.MenuItem_addSection.Size = new System.Drawing.Size(180, 22);
+            this.MenuItem_addSection.Text = "Add Section";
+            this.MenuItem_addSection.Click += new System.EventHandler(this.Add_newSection);
             // 
-            // addLineToolStripMenuItem
+            // MenuItem_addLine
             // 
-            this.addLineToolStripMenuItem.Name = "addLineToolStripMenuItem";
-            this.addLineToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.addLineToolStripMenuItem.Text = "Add Line";
-            this.addLineToolStripMenuItem.Click += new System.EventHandler(this.addLineToolStripMenuItem_Click);
+            this.MenuItem_addLine.Name = "MenuItem_addLine";
+            this.MenuItem_addLine.Size = new System.Drawing.Size(180, 22);
+            this.MenuItem_addLine.Text = "Add Line";
+            this.MenuItem_addLine.Click += new System.EventHandler(this.addLineToolStripMenuItem_Click);
             // 
             // Page_Default
             // 
@@ -313,11 +320,55 @@
             this.Button_SaveConfig.UseVisualStyleBackColor = true;
             this.Button_SaveConfig.Click += new System.EventHandler(this.Button_SaveConfig_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(12, 285);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(48, 17);
+            this.label2.TabIndex = 23;
+            this.label2.Text = "Config";
+            // 
+            // Option_Config
+            // 
+            this.Option_Config.FormattingEnabled = true;
+            this.Option_Config.Location = new System.Drawing.Point(67, 284);
+            this.Option_Config.Name = "Option_Config";
+            this.Option_Config.Size = new System.Drawing.Size(185, 21);
+            this.Option_Config.TabIndex = 22;
+            // 
+            // Button_ConfigUpdate
+            // 
+            this.Button_ConfigUpdate.Location = new System.Drawing.Point(258, 283);
+            this.Button_ConfigUpdate.Name = "Button_ConfigUpdate";
+            this.Button_ConfigUpdate.Size = new System.Drawing.Size(63, 23);
+            this.Button_ConfigUpdate.TabIndex = 24;
+            this.Button_ConfigUpdate.Text = "Update";
+            this.Button_ConfigUpdate.UseVisualStyleBackColor = true;
+            this.Button_ConfigUpdate.Click += new System.EventHandler(this.Button_ConfigUpdate_Click);
+            // 
+            // MenuItem_removeSection
+            // 
+            this.MenuItem_removeSection.Enabled = false;
+            this.MenuItem_removeSection.Name = "MenuItem_removeSection";
+            this.MenuItem_removeSection.Size = new System.Drawing.Size(180, 22);
+            this.MenuItem_removeSection.Text = "Remove Section";
+            this.MenuItem_removeSection.Click += new System.EventHandler(this.MenuItem_removeSection_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(156, 6);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1151, 570);
+            this.Controls.Add(this.Button_ConfigUpdate);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.Option_Config);
             this.Controls.Add(this.Button_SaveConfig);
             this.Controls.Add(this.Tab_Lines);
             this.Controls.Add(this.Button_ObjectAdd);
@@ -374,10 +425,15 @@
         private System.Windows.Forms.TabControl Tab_Lines;
         private System.Windows.Forms.TabPage Page_Default;
         private System.Windows.Forms.ContextMenuStrip DropDown_Lines;
-        private System.Windows.Forms.ToolStripMenuItem addLineToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MenuItem_addLine;
         private System.Windows.Forms.ToolStripMenuItem newDefinitionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem MenuItem_addSection;
         private System.Windows.Forms.Button Button_SaveConfig;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox Option_Config;
+        private System.Windows.Forms.Button Button_ConfigUpdate;
+        private System.Windows.Forms.ToolStripMenuItem MenuItem_removeSection;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }

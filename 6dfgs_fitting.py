@@ -43,8 +43,8 @@ class SixDFGSFitter:
         self.spec_name = spec_name
         self.z = z
         a = fits.open(self.file)
-        self._input_wave = a[1].data['WAVE']
-        self._input_flux = a[1].data['FLUX']
+        self._input_wave = a[1].data['WAVE'].copy()
+        self._input_flux = a[1].data['FLUX'].copy()
         self._output_wave = np.empty((len(self._input_wave),))
         self._output_flux = np.empty((len(self._input_flux),))
         self.q = None
@@ -144,8 +144,8 @@ class SixDFGSFitter:
                 save_file.write(f'{spec_id}\t{to_save}\n')
         print(f'RES:{spec_id}\t{to_save}\n')
 
-    def fit(self):
-        self.q = QSOFit(*self.output_spectrum, self.err, z=0, path=path1, config=path1+'qsopar2.fits')
+    def fit(self, config_path=os.getcwd() + '/fitting_configs/Default.fits'):
+        self.q = QSOFit(*self.output_spectrum, self.err, z=0, path=path1, config=config_path)
         start = timeit.default_timer()
         self.q.Fit(name=self.spec_name, decomposition_host=True, PL=True, poly=True, Fe_uv_op=False, BC=True,
                    CFT_smooth=75, CFT=False, MC=False, MC_conti=False,

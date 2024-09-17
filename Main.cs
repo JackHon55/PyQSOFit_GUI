@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using PyQSOFit_SBLg.Properties;
+using System.Drawing;
+using System.Xml.Linq;
 
 namespace PyQSOFit_SBLg
 {
@@ -43,6 +45,7 @@ namespace PyQSOFit_SBLg
         {
             Start_Python();
             Setup_defaultConfig();
+            Button_ConfigUpdate_Click(Button_ConfigUpdate, e);
         }
 
         private void Setup_defaultConfig()
@@ -52,8 +55,10 @@ namespace PyQSOFit_SBLg
             Page_Default.Controls.Add(flow_defHa);
             Page_Default.Controls.Add(flow_defHb);
 
-            foreach (Control xobj in flow_defHa.Controls) xobj.Enabled = false;
-            foreach (Control xobj in flow_defHb.Controls) xobj.Enabled = false;
+            foreach (Control xobj in flow_defHa.Controls) 
+                if (!(xobj is Label)) xobj.Enabled = false;
+            foreach (Control xobj in flow_defHb.Controls)
+                if (!(xobj is Label)) xobj.Enabled = false;
 
             new DefaultLine(flow_defHb, "Hb");
             new DefaultLine(flow_defHa, "Ha");
@@ -65,11 +70,6 @@ namespace PyQSOFit_SBLg
         {
             PythonInput.WriteLine("exit");
             PythonProcess.Close();
-            foreach (TabPage xpage in Tab_Lines.TabPages)
-            {
-                if (xpage.Tag != null)
-                { File.Delete(xpage.Tag.ToString()); }
-            }
         }
 
         private void Button_FileOpen_Click(object sender, EventArgs e)
@@ -89,13 +89,14 @@ namespace PyQSOFit_SBLg
         {
             Reset_Quick();
             fobject xobj = Dict_fobject[Option_Objects.SelectedItem.ToString()];
-            xobj.fit();
+            if (Option_Config.SelectedIndex == -1) xobj.fit(Pypath.T(wkd + @"fitting_configs\Default.fits"));
+            else xobj.fit(Pypath.T(wkd + $@"fitting_configs\{Option_Config.SelectedItem}"));
         }
 
         private void Save_Config()
         {           
             string spec_name = Text_PropName.Text;
-            string spec_path = Text_FilePath.Text.Replace("\\", "/");
+            string spec_path = Pypath.T(Text_FilePath.Text);
             float spec_z = float.Parse(Text_PropRedshift.Text);
             float trimA = float.Parse(Text_PropFitRangeA.Text);
             float trimB = float.Parse(Text_PropFitRangeB.Text);
@@ -280,9 +281,6 @@ namespace PyQSOFit_SBLg
                 return;
             Tab_Lines.TabPages.Add(xname);
             Tab_Lines.SelectTab(Tab_Lines.TabPages.Count - 1);
-            string tmpFilePath = Path.GetTempFileName();
-            Tab_Lines.SelectedTab.Tag = tmpFilePath;
-            Console.WriteLine(tmpFilePath);
         }
 
         private void Add_newSection(object sender, EventArgs e)
@@ -302,35 +300,193 @@ namespace PyQSOFit_SBLg
 
         private void Button_SaveConfig_Click(object sender, EventArgs e)
         {
+            if (!Test_Saveable()) return;
             SaveFileDialog xsave = new SaveFileDialog();
+            xsave.InitialDirectory = wkd + @"fitting_configs";
+            xsave.Filter = "Python files (*.py)|*.py|All files (*.*)|*.*";
+            xsave.DefaultExt = "py";
             if (xsave.ShowDialog() == DialogResult.OK)
             {
                 string savefilename = xsave.FileName;
                 Construct_ConfigFile(savefilename);
+                Run_ConfigFile(savefilename);
             }
+        }
+
+        private bool Test_Saveable()
+        {
+            if (Tab_Lines.SelectedIndex == 0)
+            {
+                MessageBox.Show("Default is already saved as Default.fits");
+                return false;
+            }
+            if (Tab_Lines.SelectedTab.Controls.Count == 0)
+            {
+                MessageBox.Show("No defined sections to save");
+                return false;
+            }
+            foreach (Control xflow in Tab_Lines.SelectedTab.Controls)
+            {
+                List<Button> valid_button = new List<Button>();
+                foreach (Control xobj in xflow.Controls)
+                {
+                    if (xobj is TextBox box && String.IsNullOrEmpty(box.Text))
+                    {
+                        MessageBox.Show($"Missing section definitions for {xflow.Name.Split('_')[1]} (Name, or wavelength range)");
+                        return false;
+                    }
+                    if (xobj is Button button) valid_button.Add(button);
+                }
+                if (valid_button.Count == 0)
+                {
+                    MessageBox.Show($"No lines in section {xflow.Name.Split('_')[1]} to save");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private List<string> SaveSection(Label xsave)
+        {
+            List<Control> xtexts = xsave.Tag as List<Control>;
+            string sec_ini = $"{xtexts[0].Text}_section = Section(section_name='{xtexts[0].Text}', " +
+                $"start_range={xtexts[1].Text}, end_range={xtexts[2].Text})";
+
+            List<string> line_ini = new List<string>();
+            List<string> line_names = new List<string>();
+            foreach (Control xobj in xsave.Parent.Controls)
+            {
+                if (xobj is Button && xobj.Name.StartsWith("line"))
+                {
+                    Dictionary<string, string> xdict = xobj.Tag as Dictionary<string, string>;
+                    string to_write = $"LineDef(l_name='{xdict["l_name"]}', l_center={xdict["l_cen"]}, " +
+                        $"scale={xdict["l_scale"]}, {xdict["defaults"]})";
+                    line_ini.Add($"{xobj.Name} = {to_write}");
+                    line_names.Add(xobj.Name);
+                }
+            }
+            string line_into_sec = $"{xtexts[0].Text}_section.add_lines([{String.Join(",", line_names)}])";
+
+            List<string> sec_defs = new List<string>();
+            sec_defs.Add($"# {xsave.Name}");
+            sec_defs.Add(sec_ini);
+            sec_defs.AddRange(line_ini);
+            sec_defs.Add(line_into_sec);
+
+            return sec_defs;
         }
 
         private void Construct_ConfigFile(string savefile)
         {
-            string[] xfile = File.ReadAllLines(Tab_Lines.SelectedTab.Tag.ToString());
+            List<string> sec_names = new List<string>();
+            List<string> sec_defs = new List<string>();
+            foreach (Control xobj in Tab_Lines.SelectedTab.Controls)
+            {
+                Label xsave = xobj.Controls["Save_info"] as Label;
+                List<Control> xlist = xsave.Tag as List<Control>;
+                sec_names.Add($"{xlist[0].Text}_section.lines");
+                sec_defs.AddRange(SaveSection(xsave));  
+            }
+
+            string sec_compile = $"newdata = np.concatenate([{String.Join(",", sec_names)}])";
             string[] xtemplate = Resources.Component_template.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None); ;
             List<string> to_save = xtemplate.ToList();
             int markerIndex = to_save.IndexOf("# Insert here");
-            if (markerIndex != -1) { to_save.InsertRange(markerIndex, xfile.ToList()); }
+            if (markerIndex != -1) 
+            { 
+                to_save.Insert(markerIndex, sec_compile);
+                to_save.InsertRange(markerIndex, sec_defs); 
+            }
             File.WriteAllLines(savefile, to_save);
+        }
+
+        private void Run_ConfigFile(string savefile) 
+        {
+            StreamWriter tmpInput;
+            ProcessStartInfo xprocess_info = new ProcessStartInfo
+            {
+                FileName = "ipython",
+                Arguments = "--no-banner --no-confirm-exit",
+                WorkingDirectory = wkd,
+                RedirectStandardInput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+
+            Process tmpPython = new Process { StartInfo = xprocess_info };
+            tmpPython.Start();
+
+            tmpInput = tmpPython.StandardInput;
+
+            tmpInput.WriteLine($"run {savefile}");
+            Console.WriteLine(savefile);
+            tmpInput.WriteLine($"hdu_list.writeto('{Pypath.T(savefile.Replace("py", "fits"))}', overwrite=True)");
+            tmpInput.Flush();
+            tmpInput.WriteLine("exit");
+            tmpPython.WaitForExit();
+            tmpPython.Close();
+
+            MessageBox.Show($"{savefile} Save Successful");
         }
 
         private void DropDown_Lines_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (Tab_Lines.SelectedIndex == 0)
             {
-                toolStripMenuItem1.Enabled = false;
-                addLineToolStripMenuItem.Enabled = false;
+                MenuItem_addSection.Enabled = false;
+                MenuItem_addLine.Enabled = false;
             }
             else
             {
-                toolStripMenuItem1.Enabled = true;
-                addLineToolStripMenuItem.Enabled = true;
+                MenuItem_addSection.Enabled = true;
+                MenuItem_addLine.Enabled = true;
+            }
+            ContextMenuStrip contextMenu = sender as ContextMenuStrip;
+            if (contextMenu.SourceControl is FlowLayoutPanel && Tab_Lines.SelectedIndex != 0) 
+                MenuItem_removeSection.Enabled = true;
+            else MenuItem_removeSection.Enabled = false;
+        }
+
+        private void Button_ConfigUpdate_Click(object sender, EventArgs e)
+        {
+            string config_folder = Path.Combine(wkd, "fitting_configs");
+            if (!Directory.Exists(config_folder))
+            {
+                MessageBox.Show("No configs found, check default path exist");
+                return;
+            }
+            string[] fitsFiles = Directory.GetFiles(config_folder, "*.fits");
+
+            // Clear existing items from the ComboBox
+            Option_Config.Items.Clear();
+
+            // Add file names to the ComboBox
+            foreach (var file in fitsFiles)
+            {
+                Option_Config.Items.Add(Path.GetFileName(file));
+            }
+
+            // Optionally, select the first item if there are any
+            if (Option_Config.Items.Count > 0)
+            {
+                if (Option_Config.Items.Contains("Default.fits")) Option_Config.SelectedItem = "Default.fits";
+                else Option_Config.SelectedIndex = 0;
+            }
+        }
+
+        private void MenuItem_removeSection_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem xmenu_item = sender as ToolStripMenuItem;
+            ContextMenuStrip xmenu = xmenu_item.GetCurrentParent() as ContextMenuStrip;
+            if (xmenu.SourceControl is FlowLayoutPanel xflow)
+            {
+                foreach (Control xobj in xflow.Controls)
+                {
+                    xobj.Dispose();
+                }
+                xflow.Controls.Clear();
+                Tab_Lines.SelectedTab.Controls.Remove(xflow);
+                xflow.Dispose();
             }
         }
     }
