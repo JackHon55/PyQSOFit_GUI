@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<section>
+		<section_name type="s">Hbeta</section_name>
+		<start_range type="f">4000</start_range>
+		<end_range type="f">5500</end_range>
+
+		<line>
+			<l_name type="s" info="fixed">Hb_br_1</l_name>
+			<l_center type="f" info="fixed">4861.33</l_center>
+			<scale type="f" info="fixed">0.005</scale>
+			<fwhm1 type="f">1200</fwhm1>
+			<fwhm2 type="f">7000</fwhm2>
+			<voffset type="f" mode="Free">1500</voffset>
+			<skew type="f" mode="Free">0</skew>
+		</line>
+
+		<line>
+			<l_name type="s" info="fixed">OIII5007c_2</l_name>
+			<l_center type="f" info="fixed">5006.84</l_center>
+			<scale type="f" info="fixed">0.003</scale>
+			<default type="s">NEL</default>
+		</line>
+
+		<line>
+			<l_name type="s" info="fixed">OIII4959c_3</l_name>
+			<l_center type="f" info="fixed">4958.91</l_center>
+			<scale type="f" info="fixed">0.333</scale>
+			<profile_link type="s">OIII5007c_2</profile_link>
+			<flux_link type="s">OIII5007c_2</flux_link>
+		</line>
+	</section>
+</config>

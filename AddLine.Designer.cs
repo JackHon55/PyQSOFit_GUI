@@ -38,7 +38,7 @@
             this.Text_lfwhm2 = new System.Windows.Forms.TextBox();
             this.Text_lscale = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.Panel_ProfileSetup = new System.Windows.Forms.Panel();
             this.Radio_custom = new System.Windows.Forms.RadioButton();
             this.Radio_defNEL = new System.Windows.Forms.RadioButton();
             this.Radio_defBEL = new System.Windows.Forms.RadioButton();
@@ -56,7 +56,13 @@
             this.Flow_defButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.Button_Remove = new System.Windows.Forms.Button();
             this.Button_save = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
+            this.Check_linkscale = new System.Windows.Forms.CheckBox();
+            this.Option_ScaleLink = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.Radio_Link = new System.Windows.Forms.RadioButton();
+            this.Option_ProfileLink = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.Panel_ProfileSetup.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -149,15 +155,18 @@
             this.label5.TabIndex = 9;
             this.label5.Text = "Scale";
             // 
-            // panel1
+            // Panel_ProfileSetup
             // 
-            this.panel1.Controls.Add(this.Radio_custom);
-            this.panel1.Controls.Add(this.Radio_defNEL);
-            this.panel1.Controls.Add(this.Radio_defBEL);
-            this.panel1.Location = new System.Drawing.Point(16, 202);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(243, 24);
-            this.panel1.TabIndex = 11;
+            this.Panel_ProfileSetup.Controls.Add(this.label10);
+            this.Panel_ProfileSetup.Controls.Add(this.Option_ProfileLink);
+            this.Panel_ProfileSetup.Controls.Add(this.Radio_Link);
+            this.Panel_ProfileSetup.Controls.Add(this.Radio_custom);
+            this.Panel_ProfileSetup.Controls.Add(this.Radio_defNEL);
+            this.Panel_ProfileSetup.Controls.Add(this.Radio_defBEL);
+            this.Panel_ProfileSetup.Location = new System.Drawing.Point(16, 202);
+            this.Panel_ProfileSetup.Name = "Panel_ProfileSetup";
+            this.Panel_ProfileSetup.Size = new System.Drawing.Size(311, 24);
+            this.Panel_ProfileSetup.TabIndex = 11;
             // 
             // Radio_custom
             // 
@@ -338,11 +347,75 @@
             this.Button_save.Visible = false;
             this.Button_save.Click += new System.EventHandler(this.Button_save_Click);
             // 
-            // AddLine
+            // Check_linkscale
+            // 
+            this.Check_linkscale.AutoSize = true;
+            this.Check_linkscale.Location = new System.Drawing.Point(251, 146);
+            this.Check_linkscale.Name = "Check_linkscale";
+            this.Check_linkscale.Size = new System.Drawing.Size(76, 17);
+            this.Check_linkscale.TabIndex = 33;
+            this.Check_linkscale.Text = "Link Scale";
+            this.Check_linkscale.UseVisualStyleBackColor = true;
+            this.Check_linkscale.CheckedChanged += new System.EventHandler(this.Check_linkscale_CheckedChanged);
+            // 
+            // Option_ScaleLink
+            // 
+            this.Option_ScaleLink.Enabled = false;
+            this.Option_ScaleLink.FormattingEnabled = true;
+            this.Option_ScaleLink.Location = new System.Drawing.Point(241, 162);
+            this.Option_ScaleLink.Name = "Option_ScaleLink";
+            this.Option_ScaleLink.Size = new System.Drawing.Size(86, 21);
+            this.Option_ScaleLink.TabIndex = 34;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(217, 163);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(14, 17);
+            this.label9.TabIndex = 35;
+            this.label9.Text = "x";
+            this.label9.Visible = false;
+            // 
+            // Radio_Link
+            // 
+            this.Radio_Link.AutoSize = true;
+            this.Radio_Link.Location = new System.Drawing.Point(247, 3);
+            this.Radio_Link.Name = "Radio_Link";
+            this.Radio_Link.Size = new System.Drawing.Size(45, 17);
+            this.Radio_Link.TabIndex = 3;
+            this.Radio_Link.TabStop = true;
+            this.Radio_Link.Text = "Link";
+            this.Radio_Link.UseVisualStyleBackColor = true;
+            this.Radio_Link.CheckedChanged += new System.EventHandler(this.Radio_Link_CheckedChanged);
+            // 
+            // Option_ProfileLink
+            // 
+            this.Option_ProfileLink.FormattingEnabled = true;
+            this.Option_ProfileLink.Location = new System.Drawing.Point(112, 26);
+            this.Option_ProfileLink.Name = "Option_ProfileLink";
+            this.Option_ProfileLink.Size = new System.Drawing.Size(86, 21);
+            this.Option_ProfileLink.TabIndex = 36;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(-1, 27);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(94, 17);
+            this.label10.TabIndex = 36;
+            this.label10.Text = "Link Profile to";
+            // 
+            // LineEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(339, 427);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.Option_ScaleLink);
+            this.Controls.Add(this.Check_linkscale);
             this.Controls.Add(this.Button_save);
             this.Controls.Add(this.Button_Remove);
             this.Controls.Add(this.Flow_defButtons);
@@ -357,7 +430,7 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.Text_voff);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.Panel_ProfileSetup);
             this.Controls.Add(this.Text_lscale);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.Text_lfwhm2);
@@ -368,11 +441,11 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Text_lname);
             this.Controls.Add(this.label1);
-            this.Name = "AddLine";
+            this.Name = "LineEdit";
             this.Text = "AddLine";
             this.Load += new System.EventHandler(this.AddLine_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.Panel_ProfileSetup.ResumeLayout(false);
+            this.Panel_ProfileSetup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -389,7 +462,7 @@
         private System.Windows.Forms.TextBox Text_lfwhm2;
         private System.Windows.Forms.TextBox Text_lscale;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel Panel_ProfileSetup;
         private System.Windows.Forms.RadioButton Radio_defNEL;
         private System.Windows.Forms.RadioButton Radio_defBEL;
         private System.Windows.Forms.TextBox Text_voff;
@@ -407,5 +480,11 @@
         private System.Windows.Forms.FlowLayoutPanel Flow_defButtons;
         private System.Windows.Forms.Button Button_Remove;
         private System.Windows.Forms.Button Button_save;
+        private System.Windows.Forms.RadioButton Radio_Link;
+        private System.Windows.Forms.CheckBox Check_linkscale;
+        private System.Windows.Forms.ComboBox Option_ScaleLink;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox Option_ProfileLink;
     }
 }

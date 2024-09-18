@@ -58,6 +58,7 @@
     <Content Include="coord_format.py" />
     <Content Include="date_format.py" />
     <Content Include="Development_notes.txt" />
+    <Content Include="fitting_configs\test1.xml" />
     <Content Include="Resources\Component_template.txt" />
     <Content Include="Resources\defLines.xml" />
     <Content Include="fitting_plots\117250.png" />
@@ -81,6 +82,7 @@
     <Content Include="Spectra_handling\Spectrum_plotting.py" />
     <Content Include="Spectra_handling\Spectrum_utls.py" />
     <Content Include="spec_config.txt" />
+    <Content Include="Xml_to_Components.py" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".git\config" />
@@ -198,7 +200,6 @@
     <Folder Include=".git\objects\pack\" />
     <Folder Include=".git\refs\heads\" />
     <Folder Include=".git\refs\tags\" />
-    <Folder Include="fitting_configs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

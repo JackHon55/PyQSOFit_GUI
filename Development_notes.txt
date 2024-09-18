@@ -3,7 +3,7 @@
 	- Complete Gamma functionality <
 	- Include all default lines <
 	- Fully support custom lines functionality <
-	- Add line linking UI
+	- Add line linking UI <
 
 Complete file saving
 	- Adding lines to sections <
@@ -12,9 +12,13 @@ Complete file saving
 	- writing all sections <
 	- saving the file <
 	- deleting sections <
+	- Update everything to xml format <
+		-- all c# code works with xml
+		-- python step to convert xml to .fits
 
 Default page functions
 	- Set the default page to immutable <
+	- Tweak Default Reading to allow for linking <
 
 Integration
 	- Allow a list of saved configs to choose from <

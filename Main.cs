@@ -303,8 +303,8 @@ namespace PyQSOFit_SBLg
             if (!Test_Saveable()) return;
             SaveFileDialog xsave = new SaveFileDialog();
             xsave.InitialDirectory = wkd + @"fitting_configs";
-            xsave.Filter = "Python files (*.py)|*.py|All files (*.*)|*.*";
-            xsave.DefaultExt = "py";
+            xsave.Filter = "XML file (*.xml)|*.xml|All files (*.*)|*.*";
+            xsave.DefaultExt = "xml";
             if (xsave.ShowDialog() == DialogResult.OK)
             {
                 string savefilename = xsave.FileName;
@@ -346,38 +346,30 @@ namespace PyQSOFit_SBLg
             return true;
         }
 
-        private List<string> SaveSection(Label xsave)
+        private XElement SaveSection(Label xsave)
         {
             List<Control> xtexts = xsave.Tag as List<Control>;
-            string sec_ini = $"{xtexts[0].Text}_section = Section(section_name='{xtexts[0].Text}', " +
-                $"start_range={xtexts[1].Text}, end_range={xtexts[2].Text})";
-
-            List<string> line_ini = new List<string>();
-            List<string> line_names = new List<string>();
+            XElement xsection = new XElement("section",
+                    new XElement("section_name", new XAttribute("type", "s"), $"{xtexts[0].Text}"),
+                    new XElement("start_range", new XAttribute("type", "f"), $"{xtexts[1].Text}"),
+                    new XElement("end_range", new XAttribute("type", "f"), $"{xtexts[2].Text}")
+                );
             foreach (Control xobj in xsave.Parent.Controls)
             {
                 if (xobj is Button && xobj.Name.StartsWith("line"))
                 {
-                    Dictionary<string, string> xdict = xobj.Tag as Dictionary<string, string>;
-                    string to_write = $"LineDef(l_name='{xdict["l_name"]}', l_center={xdict["l_cen"]}, " +
-                        $"scale={xdict["l_scale"]}, {xdict["defaults"]})";
-                    line_ini.Add($"{xobj.Name} = {to_write}");
-                    line_names.Add(xobj.Name);
+                    XElement xline = xobj.Tag as XElement;
+                    xsection.Add(new XElement("line", xline.Elements()));
                 }
             }
-            string line_into_sec = $"{xtexts[0].Text}_section.add_lines([{String.Join(",", line_names)}])";
-
-            List<string> sec_defs = new List<string>();
-            sec_defs.Add($"# {xsave.Name}");
-            sec_defs.Add(sec_ini);
-            sec_defs.AddRange(line_ini);
-            sec_defs.Add(line_into_sec);
-
-            return sec_defs;
+            return xsection;
         }
 
         private void Construct_ConfigFile(string savefile)
         {
+            XDocument xconfig = new XDocument(
+                    new XElement("config")
+                );
             List<string> sec_names = new List<string>();
             List<string> sec_defs = new List<string>();
             foreach (Control xobj in Tab_Lines.SelectedTab.Controls)
@@ -385,19 +377,10 @@ namespace PyQSOFit_SBLg
                 Label xsave = xobj.Controls["Save_info"] as Label;
                 List<Control> xlist = xsave.Tag as List<Control>;
                 sec_names.Add($"{xlist[0].Text}_section.lines");
-                sec_defs.AddRange(SaveSection(xsave));  
+                xconfig.Element("config").Add(SaveSection(xsave));
             }
 
-            string sec_compile = $"newdata = np.concatenate([{String.Join(",", sec_names)}])";
-            string[] xtemplate = Resources.Component_template.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None); ;
-            List<string> to_save = xtemplate.ToList();
-            int markerIndex = to_save.IndexOf("# Insert here");
-            if (markerIndex != -1) 
-            { 
-                to_save.Insert(markerIndex, sec_compile);
-                to_save.InsertRange(markerIndex, sec_defs); 
-            }
-            File.WriteAllLines(savefile, to_save);
+            xconfig.Save(savefile);
         }
 
         private void Run_ConfigFile(string savefile) 
@@ -418,9 +401,9 @@ namespace PyQSOFit_SBLg
 
             tmpInput = tmpPython.StandardInput;
 
-            tmpInput.WriteLine($"run {savefile}");
+            tmpInput.WriteLine($"run Component_definitions");
             Console.WriteLine(savefile);
-            tmpInput.WriteLine($"hdu_list.writeto('{Pypath.T(savefile.Replace("py", "fits"))}', overwrite=True)");
+            tmpInput.WriteLine($"write_file('{Pypath.T(savefile)}')");
             tmpInput.Flush();
             tmpInput.WriteLine("exit");
             tmpPython.WaitForExit();

@@ -13,11 +13,10 @@ primary_hdu = fits.PrimaryHDU(header=hdr0)
 
 # Save_info
 Hbeta_section = Section(section_name='Hbeta', start_range=4000, end_range=5500)
-line_Hb_br_1 = LineDef(l_name='Hb_br_1', l_center=4861.33, scale=0.005, default_bel=True)
-line_Hb_na_2 = LineDef(l_name='Hb_na_2', l_center=4861.33, scale=0.002, fwhm=(50, 700), voffset=300, vmode='', skew=(0,))
-line_OIII5007c_3 = LineDef(l_name='OIII5007c_3', l_center=5006.84, scale=0.003, default_nel=True)
-line_OIII4959c_4 = LineDef(l_name='OIII4959c_4', l_center=4958.91, scale=0.003, default_nel=True)
-Hbeta_section.add_lines([line_Hb_br_1,line_Hb_na_2,line_OIII5007c_3,line_OIII4959c_4])
+line_Hb_br_1 = LineDef(l_name='Hb_br_1', l_center=4861.33, scale=0.005, fwhm=(1200, 7000), voffset=1500, vmode='', skew=(-10, 10))
+line_OIII5007c_2 = LineDef(l_name='OIII5007c_2', l_center=5006.84, scale=0.003, default_nel=True)
+line_OIII4959c_3 = LineDef(l_name='OIII4959c_3', l_center=4958.91, scale=0.333, profile_link='OIII5007c_2*1', flux_link='OIII5007c_2*0.333')
+Hbeta_section.add_lines([line_Hb_br_1,line_OIII5007c_2,line_OIII4959c_3])
 newdata = np.concatenate([Hbeta_section.lines])
 # Insert here
 

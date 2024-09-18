@@ -1,10 +1,7 @@
 ﻿using PyQSOFit_SBLg.Properties;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -90,13 +87,9 @@ namespace PyQSOFit_SBLg
     public class LineObj
     {
         public string lname;
-        public string lcen;
-        public string lscale;
-        public string def;
-
-        public string defBEL = "default_bel=True";
-        public string defNEL = "default_nel=True";
+        public XElement linfo;
         public FlowLayoutPanel xflow;
+
         public LineObj(FlowLayoutPanel xflow) { this.xflow = xflow;  }
 
         public Button linebox
@@ -108,27 +101,14 @@ namespace PyQSOFit_SBLg
                 {
                     Text = xlname,
                     Width = 75,
-                    ///Tag = $"LineDef(l_name='{xlname}', l_center={lcen}, scale={lscale}, {def})",
-                    Tag = line_dict_gen(xlname),
                     Name = $"line_{xlname}"
                 };
                 xline.Click += linebox_click;
+                linfo.Element("l_name").Value = xlname;
+                xline.Tag = linfo;
                 return xline;
             }
 
-        }
-
-        public Dictionary<string, string> line_dict_gen(string xlname)
-        {
-            Dictionary<string, string> xinfo = new Dictionary<string, string>
-            {
-                {"l_name",  xlname},
-                {"l_cen", lcen},
-                {"l_scale", lscale},
-                {"defaults", def},
-            };
-
-            return xinfo;
         }
 
         private void linebox_click(object sender, EventArgs e)
@@ -162,86 +142,36 @@ namespace PyQSOFit_SBLg
 
         public void Populate_default(string sec)
         {
-            XmlDocument defLines = new XmlDocument();
-            defLines.LoadXml(Resources.defLines);
-            XmlNode root = defLines.DocumentElement;
+            XDocument defLines = XDocument.Parse(Resources.defLines);
+            XElement root = defLines.Root;
             if (sec == "Hb")
             {
-                Add_defline(root.SelectSingleNode("hbbroad"), "BEL");
-                Add_defline(root.SelectSingleNode("hbnarrow"), "");
-                Add_defline(root.SelectSingleNode("oiiir"), "NEL");
-                Add_defline(root.SelectSingleNode("oiiil"), "NEL");
+                Add_defline(root.Element("hbbroad"));
+                Add_defline(root.Element("hbnarrow"));
+                Add_defline(root.Element("oiiir"));
+                Add_defline(root.Element("oiiil"));
             }
             else if (sec == "Ha")
             {
-                Add_defline(root.SelectSingleNode("habroad"), "BEL");
-                Add_defline(root.SelectSingleNode("hanarrow"), "");
-                Add_defline(root.SelectSingleNode("niir"), "NEL");
-                Add_defline(root.SelectSingleNode("niil"), "NEL");
+                Add_defline(root.Element("habroad"));
+                Add_defline(root.Element("hanarrow"));
+                Add_defline(root.Element("niir"));
+                Add_defline(root.Element("niil"));
             }
         }
 
-        public void Add_defline(XmlNode xnode, string xdef)
+        public void Add_defline(XElement xnode)
         {
-            lname = xnode.SelectSingleNode("lname").InnerText;
-            lcen = xnode.SelectSingleNode("lcen").InnerText;
-            lscale = xnode.SelectSingleNode("lscale").InnerText;
-            if (xdef == "BEL")
-            {
-                def = defBEL;
-            }
-            else if (xdef == "NEL")
-            {
-                def = defNEL;
-            }
-            else
-            {
-                def = Fillin_custominfo(xnode);
-            }
+            if (xnode.Element("l_name") == null)
+                return;
+            lname = xnode.Element("l_name").Value;
+            linfo = xnode;
+            linfo.Element("dname").Remove();
+
             Button xline = linebox;
             xline.BackColor = Color.Black;
             xline.ForeColor = Color.White;
             xflow.Controls.Add(xline);
-        }
-
-        public string Fillin_custominfo(XmlNode xnode)
-        {
-            string lfwhm1 = xnode.SelectSingleNode("lfwhm1").InnerText;
-            string lfwhm2 = xnode.SelectSingleNode("lfwhm2").InnerText;
-            string lskew = xnode.SelectSingleNode("lskew").InnerText;
-            string lvoff = xnode.SelectSingleNode("lvoff").InnerText;
-            string xvmode = xnode.SelectSingleNode("vmode").InnerText;
-            string xsmode = xnode.SelectSingleNode("smode").InnerText;
-
-            string fwhms = $"fwhm=({lfwhm1}, {lfwhm2})";
-            string voffset = "";
-            string skew = "";
-            if (xvmode == "Negative")
-            {
-                voffset = $"voffset={lvoff}, vmode='-'";
-            }
-            else if (xvmode == "Fixed")
-            {
-                voffset = $"voffset={lvoff}, vmode='.'";
-            }
-            else if (xvmode == "Positive")
-            {
-                voffset = $"voffset={lvoff}, vmode='+'";
-            }
-            else
-            {
-                voffset = $"voffset={lvoff}, vmode=''";
-            }
-            if (xsmode == "Fixed")
-            {
-                skew = $"skew=({lskew},)";
-            }
-            else
-            {
-                skew = $"skew=(-10, 10)";
-            }
-
-            return $"{fwhms}, {voffset}, {skew}";
         }
     }
 }
