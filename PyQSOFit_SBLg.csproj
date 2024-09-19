@@ -182,6 +182,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="WavelengthLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WavelengthLine.Designer.cs">
+      <DependentUpon>WavelengthLine.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddLine.resx">
@@ -193,6 +199,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WavelengthLine.resx">
+      <DependentUpon>WavelengthLine.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

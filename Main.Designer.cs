@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.Label_PropName = new System.Windows.Forms.Label();
             this.Button_FileOpen = new System.Windows.Forms.Button();
             this.Text_FilePath = new System.Windows.Forms.TextBox();
@@ -54,15 +55,20 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuItem_addSection = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItem_addLine = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.MenuItem_removeSection = new System.Windows.Forms.ToolStripMenuItem();
             this.Page_Default = new System.Windows.Forms.TabPage();
             this.Button_SaveConfig = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.Option_Config = new System.Windows.Forms.ComboBox();
             this.Button_ConfigUpdate = new System.Windows.Forms.Button();
-            this.MenuItem_removeSection = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.WaveDisp_User = new PyQSOFit_SBLg.WavelengthLine();
+            this.WaveDisp_Default = new PyQSOFit_SBLg.WavelengthLine();
             this.Tab_Lines.SuspendLayout();
             this.DropDown_Lines.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // Label_PropName
@@ -91,7 +97,7 @@
             this.Text_FilePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Text_FilePath.Location = new System.Drawing.Point(115, 10);
             this.Text_FilePath.Name = "Text_FilePath";
-            this.Text_FilePath.Size = new System.Drawing.Size(979, 23);
+            this.Text_FilePath.Size = new System.Drawing.Size(918, 23);
             this.Text_FilePath.TabIndex = 2;
             // 
             // Text_PropName
@@ -181,9 +187,9 @@
             // 
             // RichText_FitDataValues
             // 
-            this.RichText_FitDataValues.Location = new System.Drawing.Point(356, 417);
+            this.RichText_FitDataValues.Location = new System.Drawing.Point(676, 193);
             this.RichText_FitDataValues.Name = "RichText_FitDataValues";
-            this.RichText_FitDataValues.Size = new System.Drawing.Size(494, 139);
+            this.RichText_FitDataValues.Size = new System.Drawing.Size(357, 113);
             this.RichText_FitDataValues.TabIndex = 14;
             this.RichText_FitDataValues.Text = "";
             // 
@@ -192,10 +198,10 @@
             this.CheckList_FitDataName.CheckOnClick = true;
             this.CheckList_FitDataName.ColumnWidth = 150;
             this.CheckList_FitDataName.FormattingEnabled = true;
-            this.CheckList_FitDataName.Location = new System.Drawing.Point(15, 417);
+            this.CheckList_FitDataName.Location = new System.Drawing.Point(676, 48);
             this.CheckList_FitDataName.MultiColumn = true;
             this.CheckList_FitDataName.Name = "CheckList_FitDataName";
-            this.CheckList_FitDataName.Size = new System.Drawing.Size(325, 139);
+            this.CheckList_FitDataName.Size = new System.Drawing.Size(357, 139);
             this.CheckList_FitDataName.TabIndex = 15;
             this.CheckList_FitDataName.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckList_FitDataName_ItemCheck);
             // 
@@ -204,10 +210,10 @@
             this.RichText_Console.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.RichText_Console.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RichText_Console.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.RichText_Console.Location = new System.Drawing.Point(356, 48);
+            this.RichText_Console.Location = new System.Drawing.Point(676, 312);
             this.RichText_Console.Name = "RichText_Console";
             this.RichText_Console.ReadOnly = true;
-            this.RichText_Console.Size = new System.Drawing.Size(494, 363);
+            this.RichText_Console.Size = new System.Drawing.Size(357, 170);
             this.RichText_Console.TabIndex = 16;
             this.RichText_Console.Text = "";
             // 
@@ -254,10 +260,10 @@
             // 
             this.Tab_Lines.ContextMenuStrip = this.DropDown_Lines;
             this.Tab_Lines.Controls.Add(this.Page_Default);
-            this.Tab_Lines.Location = new System.Drawing.Point(856, 48);
+            this.Tab_Lines.Location = new System.Drawing.Point(375, 39);
             this.Tab_Lines.Name = "Tab_Lines";
             this.Tab_Lines.SelectedIndex = 0;
-            this.Tab_Lines.Size = new System.Drawing.Size(283, 478);
+            this.Tab_Lines.Size = new System.Drawing.Size(283, 418);
             this.Tab_Lines.TabIndex = 21;
             // 
             // DropDown_Lines
@@ -276,28 +282,41 @@
             // newDefinitionToolStripMenuItem
             // 
             this.newDefinitionToolStripMenuItem.Name = "newDefinitionToolStripMenuItem";
-            this.newDefinitionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newDefinitionToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.newDefinitionToolStripMenuItem.Text = "New Definition";
             this.newDefinitionToolStripMenuItem.Click += new System.EventHandler(this.Add_newdefinition);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(156, 6);
             // 
             // MenuItem_addSection
             // 
             this.MenuItem_addSection.Name = "MenuItem_addSection";
-            this.MenuItem_addSection.Size = new System.Drawing.Size(180, 22);
+            this.MenuItem_addSection.Size = new System.Drawing.Size(159, 22);
             this.MenuItem_addSection.Text = "Add Section";
             this.MenuItem_addSection.Click += new System.EventHandler(this.Add_newSection);
             // 
             // MenuItem_addLine
             // 
             this.MenuItem_addLine.Name = "MenuItem_addLine";
-            this.MenuItem_addLine.Size = new System.Drawing.Size(180, 22);
+            this.MenuItem_addLine.Size = new System.Drawing.Size(159, 22);
             this.MenuItem_addLine.Text = "Add Line";
             this.MenuItem_addLine.Click += new System.EventHandler(this.addLineToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(156, 6);
+            // 
+            // MenuItem_removeSection
+            // 
+            this.MenuItem_removeSection.Enabled = false;
+            this.MenuItem_removeSection.Name = "MenuItem_removeSection";
+            this.MenuItem_removeSection.Size = new System.Drawing.Size(159, 22);
+            this.MenuItem_removeSection.Text = "Remove Section";
+            this.MenuItem_removeSection.Click += new System.EventHandler(this.MenuItem_removeSection_Click);
             // 
             // Page_Default
             // 
@@ -305,14 +324,14 @@
             this.Page_Default.Location = new System.Drawing.Point(4, 22);
             this.Page_Default.Name = "Page_Default";
             this.Page_Default.Padding = new System.Windows.Forms.Padding(3);
-            this.Page_Default.Size = new System.Drawing.Size(275, 452);
+            this.Page_Default.Size = new System.Drawing.Size(275, 392);
             this.Page_Default.TabIndex = 0;
             this.Page_Default.Text = "Default";
             this.Page_Default.UseVisualStyleBackColor = true;
             // 
             // Button_SaveConfig
             // 
-            this.Button_SaveConfig.Location = new System.Drawing.Point(960, 532);
+            this.Button_SaveConfig.Location = new System.Drawing.Point(476, 459);
             this.Button_SaveConfig.Name = "Button_SaveConfig";
             this.Button_SaveConfig.Size = new System.Drawing.Size(90, 23);
             this.Button_SaveConfig.TabIndex = 1;
@@ -348,24 +367,64 @@
             this.Button_ConfigUpdate.UseVisualStyleBackColor = true;
             this.Button_ConfigUpdate.Click += new System.EventHandler(this.Button_ConfigUpdate_Click);
             // 
-            // MenuItem_removeSection
+            // pictureBox1
             // 
-            this.MenuItem_removeSection.Enabled = false;
-            this.MenuItem_removeSection.Name = "MenuItem_removeSection";
-            this.MenuItem_removeSection.Size = new System.Drawing.Size(180, 22);
-            this.MenuItem_removeSection.Text = "Remove Section";
-            this.MenuItem_removeSection.Click += new System.EventHandler(this.MenuItem_removeSection_Click);
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.Location = new System.Drawing.Point(12, 541);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(1127, 124);
+            this.pictureBox1.TabIndex = 26;
+            this.pictureBox1.TabStop = false;
             // 
-            // toolStripSeparator2
+            // label3
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(156, 6);
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(40, 566);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(93, 13);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "Nothing to Display";
+            // 
+            // WaveDisp_User
+            // 
+            this.WaveDisp_User.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.WaveDisp_User.Location = new System.Drawing.Point(12, 662);
+            this.WaveDisp_User.MarkLine = System.Drawing.Color.Green;
+            this.WaveDisp_User.MaxValue = 100;
+            this.WaveDisp_User.MinValue = 0;
+            this.WaveDisp_User.Name = "WaveDisp_User";
+            this.WaveDisp_User.Size = new System.Drawing.Size(1127, 47);
+            this.WaveDisp_User.TabIndex = 27;
+            // 
+            // WaveDisp_Default
+            // 
+            this.WaveDisp_Default.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.WaveDisp_Default.Enabled = false;
+            this.WaveDisp_Default.Location = new System.Drawing.Point(12, 488);
+            this.WaveDisp_Default.MarkLine = System.Drawing.Color.Green;
+            this.WaveDisp_Default.MaxValue = 100;
+            this.WaveDisp_Default.MinValue = 0;
+            this.WaveDisp_Default.Name = "WaveDisp_Default";
+            this.WaveDisp_Default.Size = new System.Drawing.Size(1127, 47);
+            this.WaveDisp_Default.TabIndex = 25;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1151, 570);
+            this.ClientSize = new System.Drawing.Size(1151, 749);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.WaveDisp_User);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.WaveDisp_Default);
             this.Controls.Add(this.Button_ConfigUpdate);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Option_Config);
@@ -396,6 +455,7 @@
             this.Load += new System.EventHandler(this.Main_Load);
             this.Tab_Lines.ResumeLayout(false);
             this.DropDown_Lines.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -435,5 +495,9 @@
         private System.Windows.Forms.Button Button_ConfigUpdate;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_removeSection;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private WavelengthLine WaveDisp_Default;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private WavelengthLine WaveDisp_User;
+        private System.Windows.Forms.Label label3;
     }
 }

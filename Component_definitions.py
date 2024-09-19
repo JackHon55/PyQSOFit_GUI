@@ -78,3 +78,4 @@ def write_file(config_path):
     hdu1 = fits.BinTableHDU(data=newdata, header=Section.hdu_generate(), name='line_priors')
     hdu_list = fits.HDUList([primary_hdu, hdu1, hdu2, hdu3])
     hdu_list.writeto(save_path, overwrite=True)
+    return save_path

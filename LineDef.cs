@@ -144,20 +144,9 @@ namespace PyQSOFit_SBLg
         {
             XDocument defLines = XDocument.Parse(Resources.defLines);
             XElement root = defLines.Root;
-            if (sec == "Hb")
-            {
-                Add_defline(root.Element("hbbroad"));
-                Add_defline(root.Element("hbnarrow"));
-                Add_defline(root.Element("oiiir"));
-                Add_defline(root.Element("oiiil"));
-            }
-            else if (sec == "Ha")
-            {
-                Add_defline(root.Element("habroad"));
-                Add_defline(root.Element("hanarrow"));
-                Add_defline(root.Element("niir"));
-                Add_defline(root.Element("niil"));
-            }
+            foreach (XElement line in root.Elements("line"))
+                if (line.Attribute("sec").Value == sec)
+                    Add_defline(line);  
         }
 
         public void Add_defline(XElement xnode)

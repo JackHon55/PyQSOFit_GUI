@@ -3,11 +3,13 @@ import numpy as np
 
 # matplotlib.use('agg')
 import os
+
 os.environ['TF_ENABLE_ONEDNN_OPTS']='0'
 import matplotlib.pyplot as plt
 from Spectra_handling.AllSpectrum import *
 from Spectra_handling.Spectrum_utls import bpt_plotter, bpt_test, continuum_fitting
 from PyQSOFit.PyQSOFit_SVL import *
+import Component_definitions
 from rebin_spec import rebin_spec
 from scipy.signal import medfilt
 from tqdm import tqdm
@@ -100,6 +102,15 @@ class SixDFGSFitter:
     def err(self):
         return np.ones_like(self._output_flux)
 
+    def create_preview(self):
+        fig = plt.figure(frameon=False)
+        fig.set_size_inches(11.27, 1.24)
+        ax = plt.Axes(fig, [0., 0., 1., 1.])
+        ax.set_axis_off()
+        fig.add_axes(ax)
+        ax.plot(*self.output_spectrum)
+        fig.savefig(os.getcwd() + "/fitting_plots/tmp.png")
+
     @staticmethod
     def save_result(spec_id: str, results: list, save_properties: list = None, save_error: bool = False,
                     save_path: str = ""):
@@ -144,8 +155,9 @@ class SixDFGSFitter:
                 save_file.write(f'{spec_id}\t{to_save}\n')
         print(f'RES:{spec_id}\t{to_save}\n')
 
-    def fit(self, config_path=os.getcwd() + '/fitting_configs/Default.fits'):
-        self.q = QSOFit(*self.output_spectrum, self.err, z=0, path=path1, config=config_path)
+    def fit(self, config_path=os.getcwd() + '/fitting_configs/test2.xml'):
+        save_path = Component_definitions.write_file(config_path)
+        self.q = QSOFit(*self.output_spectrum, self.err, z=0, path=path1, config=save_path)
         start = timeit.default_timer()
         self.q.Fit(name=self.spec_name, decomposition_host=True, PL=True, poly=True, Fe_uv_op=False, BC=True,
                    CFT_smooth=75, CFT=False, MC=False, MC_conti=False,

@@ -18,3 +18,4 @@ D:\VScode\PyQSOFit_GUI\obj\x86\Debug\WindowsApplication.exe
 D:\VScode\PyQSOFit_GUI\obj\x86\Debug\WindowsApplication.pdb
 D:\VScode\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.Properties.Resources.resources
 D:\VScode\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.LineEdit.resources
+D:\VScode\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.WavelengthLine.resources

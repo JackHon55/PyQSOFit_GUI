@@ -39,6 +39,7 @@ namespace PyQSOFit_SBLg
         public Main()
         {
             InitializeComponent();
+            Setup_DefaultWaveDisp();
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -55,7 +56,7 @@ namespace PyQSOFit_SBLg
             Page_Default.Controls.Add(flow_defHa);
             Page_Default.Controls.Add(flow_defHb);
 
-            foreach (Control xobj in flow_defHa.Controls) 
+            foreach (Control xobj in flow_defHa.Controls)
                 if (!(xobj is Label)) xobj.Enabled = false;
             foreach (Control xobj in flow_defHb.Controls)
                 if (!(xobj is Label)) xobj.Enabled = false;
@@ -89,12 +90,12 @@ namespace PyQSOFit_SBLg
         {
             Reset_Quick();
             fobject xobj = Dict_fobject[Option_Objects.SelectedItem.ToString()];
-            if (Option_Config.SelectedIndex == -1) xobj.fit(Pypath.T(wkd + @"fitting_configs\Default.fits"));
+            if (Option_Config.SelectedIndex == -1) xobj.fit(Pypath.T(wkd + @"fitting_configs\Default.xml"));
             else xobj.fit(Pypath.T(wkd + $@"fitting_configs\{Option_Config.SelectedItem}"));
         }
 
-        private void Save_Config()
-        {           
+        private void Save_SpecConfig()
+        {
             string spec_name = Text_PropName.Text;
             string spec_path = Pypath.T(Text_FilePath.Text);
             float spec_z = float.Parse(Text_PropRedshift.Text);
@@ -112,6 +113,8 @@ namespace PyQSOFit_SBLg
             xfit.z = spec_z;
             xfit.trimA = trimA;
             xfit.trimB = trimB;
+            xfit.preview();
+            Reset_WaveSpecDisp();
         }
 
 
@@ -195,7 +198,7 @@ namespace PyQSOFit_SBLg
                     }
                     i++;
                 }
-            }            
+            }
         }
 
 
@@ -233,7 +236,7 @@ namespace PyQSOFit_SBLg
                 }
                 RichText_FitDataValues.Text = String.Join("\t", print_data.ToArray());
             }));
-            
+
         }
 
         private void Button_View_Click(object sender, EventArgs e)
@@ -244,7 +247,7 @@ namespace PyQSOFit_SBLg
 
         private void Button_ObjectAdd_Click(object sender, EventArgs e)
         {
-            Save_Config();
+            Save_SpecConfig();
             Option_Objects.Items.Clear();
             Option_Objects.Items.AddRange(Dict_fobject.Keys.ToArray());
             Option_Objects.SelectedIndex = Option_Objects.Items.Count - 1;
@@ -260,6 +263,10 @@ namespace PyQSOFit_SBLg
             Text_PropRedshift.Text = xobj.z.ToString();
             Text_PropFitRangeA.Text = xobj.trimA.ToString();
             Text_PropFitRangeB.Text = xobj.trimB.ToString();
+            WaveDisp_Default.MinValue = (int)xobj.trimA;
+            WaveDisp_Default.MaxValue = (int)xobj.trimB;
+            WaveDisp_User.MinValue = (int)xobj.trimA;
+            WaveDisp_User.MaxValue = (int)xobj.trimB;
         }
 
         private void addLineToolStripMenuItem_Click(object sender, EventArgs e)
@@ -309,7 +316,6 @@ namespace PyQSOFit_SBLg
             {
                 string savefilename = xsave.FileName;
                 Construct_ConfigFile(savefilename);
-                Run_ConfigFile(savefilename);
             }
         }
 
@@ -381,35 +387,7 @@ namespace PyQSOFit_SBLg
             }
 
             xconfig.Save(savefile);
-        }
-
-        private void Run_ConfigFile(string savefile) 
-        {
-            StreamWriter tmpInput;
-            ProcessStartInfo xprocess_info = new ProcessStartInfo
-            {
-                FileName = "ipython",
-                Arguments = "--no-banner --no-confirm-exit",
-                WorkingDirectory = wkd,
-                RedirectStandardInput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            };
-
-            Process tmpPython = new Process { StartInfo = xprocess_info };
-            tmpPython.Start();
-
-            tmpInput = tmpPython.StandardInput;
-
-            tmpInput.WriteLine($"run Component_definitions");
-            Console.WriteLine(savefile);
-            tmpInput.WriteLine($"write_file('{Pypath.T(savefile)}')");
-            tmpInput.Flush();
-            tmpInput.WriteLine("exit");
-            tmpPython.WaitForExit();
-            tmpPython.Close();
-
-            MessageBox.Show($"{savefile} Save Successful");
+            MessageBox.Show($"{savefile} saved successful");
         }
 
         private void DropDown_Lines_Opening(object sender, System.ComponentModel.CancelEventArgs e)
@@ -425,7 +403,7 @@ namespace PyQSOFit_SBLg
                 MenuItem_addLine.Enabled = true;
             }
             ContextMenuStrip contextMenu = sender as ContextMenuStrip;
-            if (contextMenu.SourceControl is FlowLayoutPanel && Tab_Lines.SelectedIndex != 0) 
+            if (contextMenu.SourceControl is FlowLayoutPanel && Tab_Lines.SelectedIndex != 0)
                 MenuItem_removeSection.Enabled = true;
             else MenuItem_removeSection.Enabled = false;
         }
@@ -438,7 +416,7 @@ namespace PyQSOFit_SBLg
                 MessageBox.Show("No configs found, check default path exist");
                 return;
             }
-            string[] fitsFiles = Directory.GetFiles(config_folder, "*.fits");
+            string[] fitsFiles = Directory.GetFiles(config_folder, "*.xml");
 
             // Clear existing items from the ComboBox
             Option_Config.Items.Clear();
@@ -452,7 +430,7 @@ namespace PyQSOFit_SBLg
             // Optionally, select the first item if there are any
             if (Option_Config.Items.Count > 0)
             {
-                if (Option_Config.Items.Contains("Default.fits")) Option_Config.SelectedItem = "Default.fits";
+                if (Option_Config.Items.Contains("Default.xml")) Option_Config.SelectedItem = "Default.xml";
                 else Option_Config.SelectedIndex = 0;
             }
         }
@@ -471,6 +449,27 @@ namespace PyQSOFit_SBLg
                 Tab_Lines.SelectedTab.Controls.Remove(xflow);
                 xflow.Dispose();
             }
+        }
+
+        private void Setup_DefaultWaveDisp()
+        {
+            WaveDisp_Default.MinValue = 4000;
+            WaveDisp_Default.MaxValue = 7000;
+            WaveDisp_Default.MarkPoint = Brushes.Red;
+            WaveDisp_Default.MarkLine = Color.Gray;
+            WaveDisp_Default.markedLines = new List<int[]> {
+                new int[]{4000, 4050}, new int[]{4200, 4230}, new int[]{4435, 4640}, new int[]{5100, 5535}, new int[]{6005, 6035},
+                new int[]{ 6100, 6250}, new int[]{6800, 7000}, new int[]{7160, 7180},
+            };
+            WaveDisp_Default.markedValues = new List<int> { 4861, 5007, 6561, 6716 };
+            WaveDisp_User.MinValue = 4000;
+            WaveDisp_User.MaxValue = 7000;
+            WaveDisp_User.MarkPoint = Brushes.Green;
+        }
+
+        private void Reset_WaveSpecDisp()
+        {
+            pictureBox1.Image = Image.FromFile(wkd + "fitting_plots/tmp.png");
         }
     }
 

@@ -28,11 +28,11 @@ class ComponentsXmlReader:
         # print(xml.text)
         return xml.text if xml.get('type') == 's' else float(xml.text)
 
-    def skew_dict(self, xml) -> Tuple[float, float]:
-        if xml.get('mode') == "Free":
-            return -10, 10
+    def skew_dict(self, xml) -> Tuple:
+        if xml.get('mode') == "Free" and self.xmlstr_to_float(xml) > 0:
+             return -1 * self.xmlstr_to_float(xml), self.xmlstr_to_float(xml)
         elif xml.get('mode') == "Fixed":
-            return self.xmlstr_to_float(xml), 0
+            return (self.xmlstr_to_float(xml), )
 
     def Create_ConfigObj(self) -> np.array:
         for xsection in self.xmldata.findall('section'):

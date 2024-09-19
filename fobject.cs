@@ -13,11 +13,16 @@ namespace PyQSOFit_SBLg
 
         public void fit(string config_path)
         {
-            Main.PythonInput.WriteLine($"spec_{spec_name} = SixDFGSFitter(file_path='{spec_path}', spec_name='{spec_name}', z={z})");
-            Main.PythonInput.WriteLine($"spec_{spec_name}.reset_output_spectrum()");
-            Main.PythonInput.WriteLine($"spec_{spec_name}.trim_spec(({trimA}, {trimB}))");
+            reset();
             Main.PythonInput.WriteLine($"spec_{spec_name}.fit('{config_path}')");
             Main.PythonInput.Flush();           
+        }
+
+        public void preview()
+        {
+            reset();
+            Main.PythonInput.WriteLine($"spec_{spec_name}.create_preview()");
+            Main.PythonInput.Flush();
         }
 
         public void plot()
@@ -25,6 +30,13 @@ namespace PyQSOFit_SBLg
             Main.PythonInput.WriteLine($"with open(spec_{spec_name}.plot_file, 'rb') as f: fig = pickle.load(f)");
             Main.PythonInput.WriteLine("plt.figure(fig.number)");
             Main.PythonInput.WriteLine("plt.show()");
+        }
+
+        public void reset()
+        {
+            Main.PythonInput.WriteLine($"spec_{spec_name} = SixDFGSFitter(file_path='{spec_path}', spec_name='{spec_name}', z={z})");
+            Main.PythonInput.WriteLine($"spec_{spec_name}.reset_output_spectrum()");
+            Main.PythonInput.WriteLine($"spec_{spec_name}.trim_spec(({trimA}, {trimB}))");
         }
     }
 
