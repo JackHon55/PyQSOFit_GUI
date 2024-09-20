@@ -102,14 +102,16 @@ class SixDFGSFitter:
     def err(self):
         return np.ones_like(self._output_flux)
 
-    def create_preview(self):
+    def create_preview(self, w, h):
         fig = plt.figure(frameon=False)
-        fig.set_size_inches(11.27, 1.24)
+        fig.set_size_inches(w/100, h/100)
         ax = plt.Axes(fig, [0., 0., 1., 1.])
         ax.set_axis_off()
         fig.add_axes(ax)
         ax.plot(*self.output_spectrum)
+        ax.set_xlim((self._output_wave[0], self._output_wave[-1]))
         fig.savefig(os.getcwd() + "/fitting_plots/tmp.png")
+        print("Preview Ready")
 
     @staticmethod
     def save_result(spec_id: str, results: list, save_properties: list = None, save_error: bool = False,

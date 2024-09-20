@@ -1,18 +1,15 @@
 import numpy as np
-from keras.src.ops import dtype
 from lmfit import minimize, Parameters
 from typing import Tuple
 from astropy import units as u
 from astropy import constants as const
 from scipy import interpolate
 from scipy.stats import median_abs_deviation as mad
-from tensorflow.python.ops.numpy_ops.np_arrays import ndarray
 
 from Spectra_handling.Spectrum_utls import skewed_voigt
 import sys
 
 cspeed = const.c.to(u.km / u.s).value  # km/s
-
 
 def array_interlace(array1: np.array, array2: np.array) -> np.array:
     """interlaces two 1D numpy arrays"""

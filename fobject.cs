@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PyQSOFit_SBLg
 {
@@ -18,10 +19,10 @@ namespace PyQSOFit_SBLg
             Main.PythonInput.Flush();           
         }
 
-        public void preview()
+        public void preview(int w, int h)
         {
             reset();
-            Main.PythonInput.WriteLine($"spec_{spec_name}.create_preview()");
+            Main.PythonInput.WriteLine($"spec_{spec_name}.create_preview({w}, {h})");
             Main.PythonInput.Flush();
         }
 

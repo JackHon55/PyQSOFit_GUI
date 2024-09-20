@@ -18,4 +18,16 @@ D:\VScode\PyQSOFit_GUI\obj\x86\Debug\WindowsApplication.exe
 D:\VScode\PyQSOFit_GUI\obj\x86\Debug\WindowsApplication.pdb
 D:\VScode\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.Properties.Resources.resources
 D:\VScode\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.LineEdit.resources
+C:\Users\Admin\Documents\PyQSOFit_GUI\bin\Debug\WindowsApplication.exe.config
+C:\Users\Admin\Documents\PyQSOFit_GUI\bin\Debug\WindowsApplication.exe
+C:\Users\Admin\Documents\PyQSOFit_GUI\bin\Debug\WindowsApplication.pdb
+C:\Users\Admin\Documents\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.csproj.AssemblyReference.cache
+C:\Users\Admin\Documents\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.LineEdit.resources
+C:\Users\Admin\Documents\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.Main.resources
+C:\Users\Admin\Documents\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.Properties.Resources.resources
+C:\Users\Admin\Documents\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.csproj.GenerateResource.cache
+C:\Users\Admin\Documents\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Documents\PyQSOFit_GUI\obj\x86\Debug\WindowsApplication.exe
+C:\Users\Admin\Documents\PyQSOFit_GUI\obj\x86\Debug\WindowsApplication.pdb
 D:\VScode\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.WavelengthLine.resources
+C:\Users\Admin\Documents\PyQSOFit_GUI\obj\x86\Debug\PyQSOFit_SBLg.WavelengthLine.resources
