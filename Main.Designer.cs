@@ -1,4 +1,6 @@
-﻿namespace PyQSOFit_SBLg
+﻿using System.Collections.Generic;
+
+namespace PyQSOFit_SBLg
 {
     partial class Main
     {
@@ -62,13 +64,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.Option_Config = new System.Windows.Forms.ComboBox();
             this.Button_ConfigUpdate = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.WaveDisp_User = new PyQSOFit_SBLg.WavelengthLine();
             this.WaveDisp_Default = new PyQSOFit_SBLg.WavelengthLine();
             this.Tab_Lines.SuspendLayout();
             this.DropDown_Lines.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // Label_PropName
@@ -187,33 +186,40 @@
             // 
             // RichText_FitDataValues
             // 
-            this.RichText_FitDataValues.Location = new System.Drawing.Point(676, 193);
+            this.RichText_FitDataValues.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.RichText_FitDataValues.Location = new System.Drawing.Point(729, 193);
             this.RichText_FitDataValues.Name = "RichText_FitDataValues";
-            this.RichText_FitDataValues.Size = new System.Drawing.Size(357, 113);
+            this.RichText_FitDataValues.Size = new System.Drawing.Size(410, 113);
             this.RichText_FitDataValues.TabIndex = 14;
             this.RichText_FitDataValues.Text = "";
             // 
             // CheckList_FitDataName
             // 
+            this.CheckList_FitDataName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.CheckList_FitDataName.CheckOnClick = true;
             this.CheckList_FitDataName.ColumnWidth = 150;
             this.CheckList_FitDataName.FormattingEnabled = true;
-            this.CheckList_FitDataName.Location = new System.Drawing.Point(676, 48);
+            this.CheckList_FitDataName.Location = new System.Drawing.Point(729, 48);
             this.CheckList_FitDataName.MultiColumn = true;
             this.CheckList_FitDataName.Name = "CheckList_FitDataName";
-            this.CheckList_FitDataName.Size = new System.Drawing.Size(357, 139);
+            this.CheckList_FitDataName.Size = new System.Drawing.Size(410, 139);
             this.CheckList_FitDataName.TabIndex = 15;
             this.CheckList_FitDataName.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckList_FitDataName_ItemCheck);
+            this.CheckList_FitDataName.Resize += new System.EventHandler(this.CheckList_FitDataName_Resize);
             // 
             // RichText_Console
             // 
+            this.RichText_Console.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.RichText_Console.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.RichText_Console.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RichText_Console.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.RichText_Console.Location = new System.Drawing.Point(676, 312);
+            this.RichText_Console.Location = new System.Drawing.Point(729, 312);
             this.RichText_Console.Name = "RichText_Console";
             this.RichText_Console.ReadOnly = true;
-            this.RichText_Console.Size = new System.Drawing.Size(357, 170);
+            this.RichText_Console.Size = new System.Drawing.Size(410, 170);
             this.RichText_Console.TabIndex = 16;
             this.RichText_Console.Text = "";
             // 
@@ -263,7 +269,7 @@
             this.Tab_Lines.Location = new System.Drawing.Point(375, 39);
             this.Tab_Lines.Name = "Tab_Lines";
             this.Tab_Lines.SelectedIndex = 0;
-            this.Tab_Lines.Size = new System.Drawing.Size(283, 418);
+            this.Tab_Lines.Size = new System.Drawing.Size(319, 418);
             this.Tab_Lines.TabIndex = 21;
             // 
             // DropDown_Lines
@@ -324,14 +330,14 @@
             this.Page_Default.Location = new System.Drawing.Point(4, 22);
             this.Page_Default.Name = "Page_Default";
             this.Page_Default.Padding = new System.Windows.Forms.Padding(3);
-            this.Page_Default.Size = new System.Drawing.Size(275, 392);
+            this.Page_Default.Size = new System.Drawing.Size(311, 392);
             this.Page_Default.TabIndex = 0;
             this.Page_Default.Text = "Default";
             this.Page_Default.UseVisualStyleBackColor = true;
             // 
             // Button_SaveConfig
             // 
-            this.Button_SaveConfig.Location = new System.Drawing.Point(476, 459);
+            this.Button_SaveConfig.Location = new System.Drawing.Point(493, 463);
             this.Button_SaveConfig.Name = "Button_SaveConfig";
             this.Button_SaveConfig.Size = new System.Drawing.Size(90, 23);
             this.Button_SaveConfig.TabIndex = 1;
@@ -356,6 +362,7 @@
             this.Option_Config.Name = "Option_Config";
             this.Option_Config.Size = new System.Drawing.Size(185, 21);
             this.Option_Config.TabIndex = 22;
+            this.Option_Config.SelectedIndexChanged += new System.EventHandler(this.Option_Config_SelectedIndexChanged);
             // 
             // Button_ConfigUpdate
             // 
@@ -366,19 +373,6 @@
             this.Button_ConfigUpdate.Text = "Update";
             this.Button_ConfigUpdate.UseVisualStyleBackColor = true;
             this.Button_ConfigUpdate.Click += new System.EventHandler(this.Button_ConfigUpdate_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(12, 541);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1127, 124);
-            this.pictureBox1.TabIndex = 26;
-            this.pictureBox1.TabStop = false;
             // 
             // label3
             // 
@@ -391,29 +385,19 @@
             this.label3.TabIndex = 28;
             this.label3.Text = "Nothing to Display";
             // 
-            // WaveDisp_User
-            // 
-            this.WaveDisp_User.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.WaveDisp_User.Location = new System.Drawing.Point(12, 662);
-            this.WaveDisp_User.MarkLine = System.Drawing.Color.Green;
-            this.WaveDisp_User.MaxValue = 100;
-            this.WaveDisp_User.MinValue = 0;
-            this.WaveDisp_User.Name = "WaveDisp_User";
-            this.WaveDisp_User.Size = new System.Drawing.Size(1127, 47);
-            this.WaveDisp_User.TabIndex = 27;
-            // 
             // WaveDisp_Default
             // 
-            this.WaveDisp_Default.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.WaveDisp_Default.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.WaveDisp_Default.Enabled = false;
-            this.WaveDisp_Default.Location = new System.Drawing.Point(12, 488);
-            this.WaveDisp_Default.MarkLine = System.Drawing.Color.Green;
+            this.WaveDisp_Default.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WaveDisp_Default.EmissionLines = new List<int>();
+            this.WaveDisp_Default.Location = new System.Drawing.Point(12, 492);
             this.WaveDisp_Default.MaxValue = 100;
             this.WaveDisp_Default.MinValue = 0;
             this.WaveDisp_Default.Name = "WaveDisp_Default";
-            this.WaveDisp_Default.Size = new System.Drawing.Size(1127, 47);
+            this.WaveDisp_Default.Preview_Image = null;
+            this.WaveDisp_Default.Size = new System.Drawing.Size(1127, 242);
             this.WaveDisp_Default.TabIndex = 25;
             // 
             // Main
@@ -421,10 +405,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1151, 749);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.WaveDisp_User);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.WaveDisp_Default);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.Button_ConfigUpdate);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Option_Config);
@@ -455,7 +437,6 @@
             this.Load += new System.EventHandler(this.Main_Load);
             this.Tab_Lines.ResumeLayout(false);
             this.DropDown_Lines.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -496,8 +477,6 @@
         private System.Windows.Forms.ToolStripMenuItem MenuItem_removeSection;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private WavelengthLine WaveDisp_Default;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private WavelengthLine WaveDisp_User;
         private System.Windows.Forms.Label label3;
     }
 }

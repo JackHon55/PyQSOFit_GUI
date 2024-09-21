@@ -7,3 +7,4 @@
 /.idea/
 /.vs/VSWorkspaceState.json
 /.vs/PyQSOFit_SBLg.csproj.dtbcache.json
+/PyQSOFit\__pycache__/

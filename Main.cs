@@ -112,9 +112,7 @@ namespace PyQSOFit_SBLg
             xfit.spec_name = spec_name;
             xfit.z = spec_z;
             xfit.trimA = trimA;
-            xfit.trimB = trimB;
-            xfit.preview();
-            Reset_WaveSpecDisp();
+            xfit.trimB = trimB;     
         }
 
 
@@ -150,10 +148,8 @@ namespace PyQSOFit_SBLg
             while ((line = await PythonOutput.ReadLineAsync()) != null)
             {
                 AppendTextToTextBox(line + Environment.NewLine);
-                if (line.StartsWith("RES:"))
-                {
-                    PyQSOFit_Output_Reader(line);
-                }
+                if (line.Contains("RES:")) PyQSOFit_Output_Reader(line);
+                if (line.Contains("Preview Ready")) Reset_WaveSpecDisp();
             }
             return line;
         }
@@ -265,8 +261,7 @@ namespace PyQSOFit_SBLg
             Text_PropFitRangeB.Text = xobj.trimB.ToString();
             WaveDisp_Default.MinValue = (int)xobj.trimA;
             WaveDisp_Default.MaxValue = (int)xobj.trimB;
-            WaveDisp_User.MinValue = (int)xobj.trimA;
-            WaveDisp_User.MaxValue = (int)xobj.trimB;
+            xobj.preview(WaveDisp_Default.ImgW, WaveDisp_Default.ImgH);
         }
 
         private void addLineToolStripMenuItem_Click(object sender, EventArgs e)
@@ -455,21 +450,36 @@ namespace PyQSOFit_SBLg
         {
             WaveDisp_Default.MinValue = 4000;
             WaveDisp_Default.MaxValue = 7000;
-            WaveDisp_Default.MarkPoint = Brushes.Red;
-            WaveDisp_Default.MarkLine = Color.Gray;
-            WaveDisp_Default.markedLines = new List<int[]> {
+            WaveDisp_Default.ContinuumWindow = new List<int[]> {
                 new int[]{4000, 4050}, new int[]{4200, 4230}, new int[]{4435, 4640}, new int[]{5100, 5535}, new int[]{6005, 6035},
                 new int[]{ 6100, 6250}, new int[]{6800, 7000}, new int[]{7160, 7180},
             };
-            WaveDisp_Default.markedValues = new List<int> { 4861, 5007, 6561, 6716 };
-            WaveDisp_User.MinValue = 4000;
-            WaveDisp_User.MaxValue = 7000;
-            WaveDisp_User.MarkPoint = Brushes.Green;
         }
 
         private void Reset_WaveSpecDisp()
         {
-            pictureBox1.Image = Image.FromFile(wkd + "fitting_plots/tmp.png");
+            using (FileStream fs = new FileStream(wkd + "fitting_plots/tmp.png", FileMode.Open, FileAccess.Read))
+            {
+                WaveDisp_Default.Preview_Image = Image.FromStream(fs); // Create a copy in memory to avoid locking
+            }
+        }
+
+        private void Option_Config_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox xoption = sender as ComboBox;
+            if (xoption.SelectedIndex == -1) { return; }
+            List<int> line_list = new List<int> { };
+            XDocument xconfig = XDocument.Load(wkd + "fitting_configs/" + xoption.Text);
+            foreach (XElement xline in xconfig.Root.Elements("section").Elements("line"))
+            {
+                line_list.Add((int)float.Parse(xline.Element("l_center").Value));
+            }
+            WaveDisp_Default.EmissionLines = line_list;
+        }
+
+        private void CheckList_FitDataName_Resize(object sender, EventArgs e)
+        {
+            WaveDisp_Default.MaxValue = WaveDisp_Default.MaxValue;
         }
     }
 
