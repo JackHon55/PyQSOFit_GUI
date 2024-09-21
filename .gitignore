@@ -1,12 +1,9 @@
 /pythonProject/
-/.vs/PyQSOFit_GUI/FileContentIndex/9f1380c5-2a78-4636-912c-31b42c125518.vsidx
-/.vs/PyQSOFit_GUI/FileContentIndex/a636240f-2ca4-4421-89b8-c71ab72bcd60.vsidx
-/.vs/PyQSOFit_GUI/FileContentIndex/e72ad1a5-39c2-4d0e-bcca-d011f7c3af49.vsidx
-/.vs/PyQSOFit_GUI/FileContentIndex/fe2d9a47-1c5e-4a08-8025-013a499279c3.vsidx
-/.vs/PyQSOFit_GUI/v17/.wsuo
-/.vs/PyQSOFit_GUI/v17/DocumentLayout.json
+/.vs/
 /.vs/slnx.sqlite
 /obj/x86/Release/.NETFramework,Version=v4.8.AssemblyAttributes.cs
 /obj/x86/Release/PyQSOFit_SBLg.csproj.AssemblyReference.cache
-/.vs/PyQSOFit_GUI/FileContentIndex/5678c1a9-6e6c-42ae-9ced-0ff9ffb92203.vsidx
-/.vs/PyQSOFit_GUI/FileContentIndex/cff6913a-3d2d-4211-a0af-15805bb297a8.vsidx
+/.vs/
+/.idea/
+/.vs/VSWorkspaceState.json
+/.vs/PyQSOFit_SBLg.csproj.dtbcache.json
