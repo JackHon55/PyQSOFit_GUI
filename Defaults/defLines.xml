@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<lines>
+	<line sec="Hb">
+		<dname type="s">Hb Broad</dname>
+		<l_name type="s" info="fixed">Hb_br</l_name>
+		<l_center type="f" info="fixed">4861.33</l_center>
+		<scale type="f" info="fixed">0.005</scale>
+		<default type="s">BEL</default>		
+	</line>
+
+	<line sec="Hb">
+		<dname type="s">Hb Narrow</dname>
+		<l_name type="s" info="fixed">Hb_na</l_name>
+		<l_center type="f" info="fixed">4861.33</l_center>
+		<scale type="f" info="fixed">0.002</scale>
+		<fwhm1 type="f">50</fwhm1>
+		<fwhm2 type="f">700</fwhm2>
+		<skew type="f" mode="Fixed">0</skew>
+		<voffset type="f" mode="Free">300</voffset>
+	</line>
+
+	<line sec="Hb">
+		<dname type="s">OIII5007</dname>
+		<l_name type="s" info="fixed">OIII5007c</l_name>
+		<l_center type="f" info="fixed">5006.84</l_center>
+		<scale type="f" info="fixed">0.003</scale>
+		<default type="s">NEL</default>
+	</line>
+
+	<line sec="Hb">
+		<dname type="s">OIII4959</dname>
+		<l_name type="s" info="fixed">OIII4959c</l_name>
+		<l_center type="f" info="fixed">4958.91</l_center>
+		<scale type="f" info="fixed">0.333</scale>
+		<flux_link type="s">OIII5007c</flux_link>
+		<profile_link type="s">OIII5007c</profile_link>
+	</line>
+
+	<line sec="Ha">
+		<dname type="s">Ha Broad</dname>
+		<l_name type="s" info="fixed">Ha_br</l_name>
+		<l_center type="f" info="fixed">6562.82</l_center>
+		<scale type="f" info="fixed">0.005</scale>
+		<default type="s">BEL</default>
+	</line>
+
+	<line sec="Ha">
+		<dname type="s">Ha Narrow</dname>
+		<l_name type="s" info="fixed">Ha_nr</l_name>
+		<l_center type="f" info="fixed">6562.82</l_center>
+		<scale type="f" info="fixed">0.003</scale>
+		<fwhm1 type="f">50</fwhm1>
+		<fwhm2 type="f">700</fwhm2>
+		<skew type="f" mode="Fixed">0</skew>
+		<voffset type="f" mode="Free">300</voffset>
+	</line>
+
+	<line sec="Ha">
+		<dname type="s">NII6585</dname>
+		<l_name type="s" info="fixed">NII6585c</l_name>
+		<l_center type="f" info="fixed">6583.46</l_center>
+		<scale type="f" info="fixed">0.003</scale>
+		<default type="s">NEL</default>
+	</line>
+
+	<line sec="Ha">
+		<dname type="s">NII6549</dname>
+		<l_name type="s" info="fixed">NII6549c</l_name>
+		<l_center type="f" info="fixed">6548.05</l_center>
+		<scale type="f" info="fixed">0.333</scale>
+		<flux_link type="s">NII6585c</flux_link>
+		<profile_link type="s">NII6585c</profile_link>
+	</line>
+	
+	<defBEL>
+		<fwhm1 type="f">1200</fwhm1>
+		<fwhm2 type="f">7000</fwhm2>
+		<skew type="f" mode="Free">10</skew>
+		<voffset type="f" mode="Free">1500</voffset>
+	</defBEL>
+
+	<defNEL>
+		<fwhm1 type="f">50</fwhm1>
+		<fwhm2 type="f">1200</fwhm2>
+		<skew type="f" mode="Fixed">10</skew>
+		<voffset type="f" mode="Free">300</voffset>
+	</defNEL>
+</lines>

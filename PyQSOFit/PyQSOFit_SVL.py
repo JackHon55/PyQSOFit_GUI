@@ -141,10 +141,10 @@ class QSOFit:
         self.ebmv = ebmv
         self.c = 299792.458  # km/s
 
-    def Fit(self, name=None, nsmooth=1, and_or_mask=True, reject_badpix=True, deredden=True,
-            decomposition_host=True, BC03=False, Mi=None, npca_gal=5, npca_qso=20,
-            Fe_uv_op=True, redshift=True, poly=False, PL=True, CFT=False, CFT_smooth=75, BC=False,
-            MC_conti=False, MC=True, n_trails=1, linefit=True,
+    def Fit(self, name=None, nsmooth=1, and_or_mask=True, reject_badpix=False, deredden=False,
+            decomposition_host=False, BC03=False, Mi=None, npca_gal=5, npca_qso=20,
+            Fe_uv_op=False, redshift=True, poly=False, PL=False, CFT=False, CFT_smooth=75, BC=False,
+            MC_conti=False, MC=False, n_trails=15, linefit=True,
             save_result=True, plot_fig=True, save_fig=True, plot_line_name=True, plot_legend=True, dustmap_path=None,
             save_fig_path=None, save_fits_path=None, save_fits_name=None):
 
@@ -442,23 +442,9 @@ class QSOFit:
                 print('redshift larger than 1.16 is not allowed for host decomposion!')
 
         # fit continuum --------------------
-        '''if not self.Fe_uv_op and not self.poly and not self.BC and not self.PL:
-            self.line_flux = self.flux if self.line_flux is None else self.line_flux
-            self.conti_fit = np.zeros_like(self.wave)
-            self.f_bc_model = np.zeros_like(self.wave)
-            self.f_fe_uv_model = np.zeros_like(self.wave)
-            self.f_fe_op_model = np.zeros_like(self.wave)
-            self.f_pl_model = np.zeros_like(self.wave)
-            self.f_poly_model = np.zeros_like(self.wave)
-            self.PL_poly_BC = np.zeros_like(self.wave)
-            self.tmp_all = np.zeros_like(self.wave)
-            self.conti_result = np.zeros_like(self.wave)
-            self.f_conti_model = np.zeros_like(self.wave) if self.f_conti_model is None else self.f_conti_model
-        else:
-            print('Fit Conti')
+        if not CFT:
             self._DoContiFit()
-            print('Conti done')'''
-        self._DoContiFit()
+
         # fit line
         print('Fit Line')
         if linefit:

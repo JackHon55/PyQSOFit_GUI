@@ -89,39 +89,5 @@ namespace PyQSOFit_SBLg.Properties {
                 return ResourceManager.GetString("Component_template", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;line&gt;
-        ///	&lt;hbbroad&gt;
-        ///		&lt;lname&gt;Hb_br&lt;/lname&gt;
-        ///		&lt;lcen&gt;4861.33&lt;/lcen&gt;
-        ///		&lt;lscale&gt;0.005&lt;/lscale&gt;
-        ///		&lt;default&gt;BEL&lt;/default&gt;		
-        ///	&lt;/hbbroad&gt;
-        ///
-        ///	&lt;hbnarrow&gt;
-        ///		&lt;lname&gt;Hb_na&lt;/lname&gt;
-        ///		&lt;lcen&gt;4861.33&lt;/lcen&gt;
-        ///		&lt;lscale&gt;0.002&lt;/lscale&gt;
-        ///		&lt;lfwhm1&gt;50&lt;/lfwhm1&gt;
-        ///		&lt;lfwhm2&gt;700&lt;/lfwhm2&gt;
-        ///		&lt;lskew&gt;0&lt;/lskew&gt;
-        ///		&lt;lvoff&gt;300&lt;/lvoff&gt;
-        ///		&lt;vmode&gt;Free&lt;/vmode&gt;
-        ///		&lt;smode&gt;Fixed&lt;/smode&gt;
-        ///	&lt;/hbnarrow&gt;
-        ///
-        ///	&lt;oiiir&gt;
-        ///		&lt;lname&gt;OIII5007c&lt;/lname&gt;
-        ///		&lt;lcen&gt;5006.84&lt;/lcen&gt;
-        ///		&lt;lscale&gt;0.003&lt;/lscale&gt;
-        ///		&lt;defa [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string defLines {
-            get {
-                return ResourceManager.GetString("defLines", resourceCulture);
-            }
-        }
     }
 }

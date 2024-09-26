@@ -504,7 +504,7 @@ class LineProperties:
         disp = np.diff(wave)[0]
         left = wave.min()
         right = wave.max()
-        xx = np.arange(left, right, disp)
+        xx = np.arange(left, right + disp, disp)
         xlog = np.log(xx)
         yy = manygauss(xlog, self.pp)
         return xx, yy

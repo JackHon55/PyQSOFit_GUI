@@ -53,21 +53,19 @@ class ContiFit:
         self.fe4570 = 0
         self.fe4570_error = 0
         self.CFT = CFT
+        self.fe_uv = np.genfromtxt(self.path + 'feII_UV_Mejia.txt')
+        self.fe_op = np.genfromtxt(self.path + 'fe_optical.txt', delimiter='')[1:].T
 
         if self.CFT:
             self.Fe_uv_op = False
             self.poly = False
             self.BC = False
             self.PL = False
-            self.fe_uv = None
-            self.fe_op = None
         else:
             self.Fe_uv_op = Fe_uv_op
             self.poly = poly
             self.BC = BC
             self.PL = True
-            self.fe_uv = np.genfromtxt(self.path + 'feII_UV_Mejia.txt')
-            self.fe_op = np.genfromtxt(self.path + 'fe_optical.txt', delimiter='')[1:].T
 
         self.MC_conti = MC_conti
         self.n_trails = n_trails

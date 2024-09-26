@@ -33,4 +33,24 @@
       <flux_link type="s">OIII5007c_3</flux_link>
     </line>
   </section>
+  <section>
+    <section_name type="s">Halpha</section_name>
+    <start_range type="f">6000</start_range>
+    <end_range type="f">7000</end_range>
+    <line>
+      <l_name type="s" info="fixed">Ha_br_1</l_name>
+      <l_center type="f" info="fixed">6562.82</l_center>
+      <scale type="f" info="fixed">0.005</scale>
+      <default type="s">BEL</default>
+    </line>
+    <line>
+      <l_name type="s" info="fixed">Ha_nr_2</l_name>
+      <l_center type="f" info="fixed">6562.82</l_center>
+      <scale type="f" info="fixed">0.003</scale>
+      <fwhm1 type="f">50</fwhm1>
+      <fwhm2 type="f">700</fwhm2>
+      <skew type="f" mode="Fixed">0</skew>
+      <voffset type="f" mode="Free">300</voffset>
+    </line>
+  </section>
 </config>

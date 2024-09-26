@@ -13,8 +13,8 @@ Complete file saving
 	- saving the file <
 	- deleting sections <
 	- Update everything to xml format <
-		-- all c# code works with xml
-		-- python step to convert xml to .fits
+		-- all c# code works with xml <
+		-- python step to convert xml to .fits <
 
 Default page functions
 	- Set the default page to immutable <
@@ -23,3 +23,28 @@ Default page functions
 Integration
 	- Allow a list of saved configs to choose from <
 	- Can open saved configs into the UI for tweaking and use etc
+	- Remove Old stuff
+
+Reimplementation
+	- Create new sections <
+	- Delete sections <
+	- save config <
+	- create config <
+	- add new line <
+	- edit line <
+	- delete line <
+		- need to fix index doubling up <
+	- Pop out X Give up for now
+	- scroll sections <
+
+Continuum Display
+	- Search in folder <
+	- Save <
+	- New <
+	- Ui <
+	- Python end <
+
+Fit object
+	- Ui <
+	- Functionality
+	- Python end

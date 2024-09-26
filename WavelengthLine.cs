@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using System.IO;
+using static System.Windows.Forms.LinkLabel;
 
 namespace PyQSOFit_SBLg
 {
@@ -11,12 +14,20 @@ namespace PyQSOFit_SBLg
         private int maxValue = 7000;    // Maximum value on the number line
         public List<int> _EmissionLines = new List<int>(); 
         private int tmpMarker = 0;
-        public List<int[]> ContinuumWindow = new List<int[]>(); // List to store the marked set of lines
+        public List<int[]> _ContinuumWindow = new List<int[]>(); // List to store the marked set of lines
         private int numberLineHeight = 20;   // Height of the number line
         private Color mark_point = Color.Red;
         private Color mark_cwindow = Color.Gray;
         private Color mark_line = Color.LimeGreen;
         private Image _preview_Image = null;
+        private List<int[]> DefaultWindow = new List<int[]>();
+        private string _contifolder;
+
+        public string Path_ContiFolder
+        {
+            get { return _contifolder; } 
+            set { _contifolder = value; } 
+        }
 
         public WavelengthLine()
         {
@@ -28,6 +39,37 @@ namespace PyQSOFit_SBLg
         private void WavelengthLine_Load(object sender, EventArgs e)
         {
 
+        }
+
+        public void WavelengthLine_Shown()
+        {
+            Update_ConfigList();
+        }
+
+        public void Update_ConfigList()
+        {
+            if (!Directory.Exists(Path_ContiFolder))
+            {
+                MessageBox.Show("No configs found, check default path exist");
+                return;
+            }
+            string[] txtFiles = Directory.GetFiles(Path_ContiFolder, "*.txt");
+
+            // Clear existing items from the ComboBox
+            Option_Config.Items.Clear();
+
+            // Add file names to the ComboBox
+            foreach (var file in txtFiles)
+            {
+                Option_Config.Items.Add(Path.GetFileName(file));
+            }
+
+            // Optionally, select the first item if there are any
+            if (Option_Config.Items.Count > 0)
+            {
+                if (Option_Config.Items.Contains("Default.txt")) Option_Config.SelectedItem = "Default.txt";
+                else Option_Config.SelectedIndex = 0;
+            }
         }
 
         public int MinValue
@@ -78,6 +120,21 @@ namespace PyQSOFit_SBLg
             }
         }
 
+        public List<int[]> ContinuumWindow
+        {
+            get { return _ContinuumWindow; }
+            set
+            {
+                if (value == null)
+                {
+                    _ContinuumWindow.Clear();
+                    foreach (int[] xrange in DefaultWindow) _ContinuumWindow.Add(xrange);
+                }
+                else _ContinuumWindow = value;
+                pictureBox1.Invalidate();
+            }
+        }
+
         private int MouseXValue(MouseEventArgs e)
         {
             int xval = minValue + e.X * (maxValue - minValue) / ImgW;
@@ -106,17 +163,7 @@ namespace PyQSOFit_SBLg
                 g.DrawString(label, pictureBox1.Font, Brushes.Black, Point_Boundary(x - 10, lineY + 10));
             }
 
-
-            foreach (int[] markedline in ContinuumWindow)
-            {
-                int startX = (markedline[0] - minValue) * ImgW / (maxValue - minValue);
-                int endX = (markedline[1] - minValue) * ImgW / (maxValue - minValue);
-                g.DrawLine(new Pen(mark_cwindow, 5), startX, lineY, endX, lineY);
-
-                Brush semiT = new SolidBrush(Color.FromArgb(128, mark_cwindow));
-                Rectangle conti_rect = new Rectangle(startX, lineY / 2, endX - startX, lineY / 2);
-                g.FillRectangle(semiT, conti_rect);
-            }
+            if (Button_ShowConti.Text == "Hide") Paint_ContiW(g, lineY);
 
             // Draw marked values
             foreach (int markedValue in EmissionLines)
@@ -133,6 +180,22 @@ namespace PyQSOFit_SBLg
                 g.DrawString($"{tmpMarker}", pictureBox1.Font, new SolidBrush(mark_point), Point_Boundary(tmpx - 10, lineY - 20));
             }
 
+        }
+
+        private void Paint_ContiW(Graphics g, int lineY)
+        {
+            foreach (int[] markedline in ContinuumWindow)
+            {
+                int startX = (markedline[0] - minValue) * ImgW / (maxValue - minValue);
+                int endX = (markedline[1] - minValue) * ImgW / (maxValue - minValue);
+                if (startX < 0 || startX > ImgW) continue;
+                if (endX < 0 || endX > ImgW) continue;
+                g.DrawLine(new Pen(mark_cwindow, 5), startX, lineY, endX, lineY);
+
+                Brush semiT = new SolidBrush(Color.FromArgb(128, mark_cwindow));
+                Rectangle conti_rect = new Rectangle(startX, lineY / 2, endX - startX, lineY / 2);
+                g.FillRectangle(semiT, conti_rect);
+            }
         }
 
         private PointF Point_Boundary(int x, int y)
@@ -196,6 +259,81 @@ namespace PyQSOFit_SBLg
             if (xbutt.BackColor == SystemColors.Control)
                 xbutt.BackColor = Color.SkyBlue;
             else xbutt.BackColor = SystemColors.Control;
+        }
+
+        private void Reset_ContiW(object sender, EventArgs e)
+        {
+            ContinuumWindow = null;
+        }
+
+        private void Button_ShowConti_Click(object sender, EventArgs e)
+        {
+            Button xbutt = sender as Button;
+            if (xbutt.Text == "Show")
+                xbutt.Text = "Hide";
+            else xbutt.Text = "Show";
+            pictureBox1.Invalidate();
+        }
+
+        private void Option_Config_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string[] lines = File.ReadAllLines($"{Path_ContiFolder}/{Option_Config.Text}");
+            lines = lines.Skip(1).ToArray();
+            DefaultWindow.Clear();
+            foreach (string xline in lines)
+            {
+                if (String.IsNullOrEmpty(xline)) continue;
+                if (!xline.Contains(',')) continue;
+                int[] tmp = new int[] { int.Parse(xline.Split(',')[0]), int.Parse(xline.Split(',')[1]) };
+                DefaultWindow.Add(tmp);
+            }
+            ContinuumWindow = null;
+        }
+
+        private void Button_RefreshListClick(object sender, EventArgs e)
+        {
+            Update_ConfigList();
+        }
+
+        private void Button_SaveClick(object sender, EventArgs e)
+        {
+            SaveFileDialog xsave = new SaveFileDialog();
+            xsave.InitialDirectory = Path_ContiFolder;
+            xsave.Filter = "Text file (*.txt)|*.txt|All files (*.*)|*.*";
+            xsave.DefaultExt = "txt";
+            if (xsave.ShowDialog() == DialogResult.OK)
+            {
+                string savefilename = xsave.FileName;
+                Construct_ConfigFile(savefilename);
+
+                MessageBox.Show($"{Path.GetFileName(savefilename)} saved successfully");
+                Option_Config.SelectedItem = Path.GetFileName(savefilename);
+            }
+        }
+
+        private void Construct_ConfigFile(string savefile)
+        {
+            ContinuumWindow.Sort((a, b) => a[0].CompareTo(b[0]));
+            List<string> xlines = new List<string> { "# Continuum Window Ranges" };
+            xlines.AddRange(ContinuumWindow.Select(arr => $"{arr[0]}, {arr[1]}").ToList());
+
+            File.WriteAllLines(savefile, xlines.ToArray());
+        }
+
+        private void Button_NewClick(object sender, EventArgs e)
+        {
+            SaveFileDialog xsave = new SaveFileDialog();
+            xsave.InitialDirectory = Path_ContiFolder;
+            xsave.Filter = "Text file (*.txt)|*.txt|All files (*.*)|*.*";
+            xsave.DefaultExt = "txt";
+
+            if (xsave.ShowDialog() == DialogResult.OK)
+            {
+                string savefilename = xsave.FileName;
+                File.WriteAllLines(savefilename, new string[] { });
+
+                Option_Config.SelectedItem = Path.GetFileName(savefilename);
+            }
         }
     }
 }

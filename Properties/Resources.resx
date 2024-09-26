@@ -121,7 +121,4 @@
   <data name="Component_template" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Component_template.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="defLines" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\defLines.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
 </root>

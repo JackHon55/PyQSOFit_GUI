@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PyQSOFit_SBLg
@@ -10,13 +11,21 @@ namespace PyQSOFit_SBLg
         public float z = 0;
         public float trimA = 2500;
         public float trimB = 7000;
+        public string line_config = "";
+        public string conti_config = "";
+        public List<string> kwargs = new List<string> { };
+        public List<string> contiparams = new List<string> { };
         public Dictionary<string, float> Dict_FitResult = new Dictionary<string, float>();
 
-        public void fit(string config_path)
+        public void fit()
         {
             reset();
-            Main.PythonInput.WriteLine($"spec_{spec_name}.fit('{config_path}')");
-            Main.PythonInput.Flush();           
+            string fitting_config = '{' + String.Join(",", kwargs) + '}';
+            string conti_params = '{' + String.Join(",", contiparams) + '}';
+
+            Main.PythonInput.WriteLine($"spec_{spec_name}.fit('{line_config}', '{conti_config}', " +
+                $"contiparams={conti_params}, fittingparams={fitting_config})");
+            Main.PythonInput.Flush();
         }
 
         public void preview(int w, int h)

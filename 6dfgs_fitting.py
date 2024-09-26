@@ -82,6 +82,7 @@ class SixDFGSFitter:
         wave_tmp, flux_tmp = self.clean_input_spec()
         flux_tmp = self.normalise_input_spec(flux_tmp)
         self._output_wave, self._output_flux = self.blueshift_spec(wave_tmp, flux_tmp, self.z)
+        # self._output_wave, self._output_flux = wave_tmp, flux_tmp
 
     def trim_spec(self, wave_range: Tuple, start_pixel_rm: int = 0, end_pixel_rm: int = 0):
         trim_bool = (self._output_wave > wave_range[0]) & (self._output_wave < wave_range[1])
@@ -111,7 +112,9 @@ class SixDFGSFitter:
         ax.plot(*self.output_spectrum)
         ax.set_xlim((self._output_wave[0], self._output_wave[-1]))
         fig.savefig(os.getcwd() + "/fitting_plots/tmp.png")
+        plt.close(fig)
         print("Preview Ready")
+
 
     @staticmethod
     def save_result(spec_id: str, results: list, save_properties: list = None, save_error: bool = False,
@@ -157,16 +160,15 @@ class SixDFGSFitter:
                 save_file.write(f'{spec_id}\t{to_save}\n')
         print(f'RES:{spec_id}\t{to_save}\n')
 
-    def fit(self, config_path=os.getcwd() + '/fitting_configs/test2.xml'):
-        save_path = Component_definitions.write_file(config_path)
-        self.q = QSOFit(*self.output_spectrum, self.err, z=0, path=path1, config=save_path)
+
+    def fit(self, config_path, conti_path, contiparams: dict, fittingparams: dict):
+        save_path = Component_definitions.write_file(config_path, conti_path, contiparams)
+
+        self.q = QSOFit(*self.output_spectrum, self.err, z=self.z, path=path1, config=save_path)
         start = timeit.default_timer()
-        self.q.Fit(name=self.spec_name, decomposition_host=True, PL=True, poly=True, Fe_uv_op=False, BC=True,
-                   CFT_smooth=75, CFT=False, MC=False, MC_conti=False,
-                   nsmooth=1, deredden=False, reject_badpix=False, redshift=False,
-                   n_trails=15, linefit=True, save_result=False, plot_fig=True, save_fig=True,
-                   plot_line_name=True, plot_legend=True, dustmap_path=None,
-                   save_fig_path=fig_path + str(self.spec_name), save_fits_path=None, save_fits_name=None)
+        self.q.Fit(name=self.spec_name, redshift=False, save_result=False, plot_fig=True, save_fig=True,
+                   save_fig_path=fig_path + str(self.spec_name), save_fits_path=None, save_fits_name=None,
+                   **fittingparams)
 
         plt.axvline(6885 / (1 + self.z))
         plt.axvline(5577 / (1 + self.z))
@@ -189,3 +191,7 @@ class SixDFGSFitter:
                          save_path=os.getcwd() + "/fitting_results.txt", save_error=False)
 
 print("Ready to fit!")
+'''a = SixDFGSFitter(file_path='test_spectra/0022878_1d.fits', spec_name='22878', z=0.06915)
+a.reset_output_spectrum()
+a.trim_spec((4000, 7000))
+a.fit('fitting_configs/Default.xml', 'conti_configs/Default.txt', CFT=True)'''

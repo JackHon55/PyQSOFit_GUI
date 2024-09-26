@@ -55,12 +55,14 @@
     <Content Include=".idea\workspace.xml" />
     <Content Include="6dfgs_fitting.py" />
     <Content Include="Component_definitions.py" />
+    <Content Include="conti_configs\Default.txt" />
     <Content Include="coord_format.py" />
     <Content Include="date_format.py" />
+    <Content Include="Defaults\ContiWindow.txt" />
+    <Content Include="Defaults\defLines.xml" />
     <Content Include="Development_notes.txt" />
     <Content Include="fitting_configs\test1.xml" />
     <Content Include="Resources\Component_template.txt" />
-    <Content Include="Resources\defLines.xml" />
     <Content Include="fitting_plots\117250.png" />
     <Content Include="fitting_plots\117270.png" />
     <Content Include="fitting_plots\22878.png" />
@@ -163,14 +165,20 @@
     <None Include="__pycache__\rebin_spec.cpython-36.pyc" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddLine.cs">
-      <SubType>Form</SubType>
+    <Compile Include="ConfigDisplay.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AddLine.Designer.cs">
-      <DependentUpon>AddLine.cs</DependentUpon>
+    <Compile Include="ConfigDisplay.Designer.cs">
+      <DependentUpon>ConfigDisplay.cs</DependentUpon>
     </Compile>
     <Compile Include="fobject.cs" />
     <Compile Include="LineDef.cs" />
+    <Compile Include="LineSections.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LineSections.Designer.cs">
+      <DependentUpon>LineSections.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,8 +198,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddLine.resx">
-      <DependentUpon>AddLine.cs</DependentUpon>
+    <EmbeddedResource Include="ConfigDisplay.resx">
+      <DependentUpon>ConfigDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LineSections.resx">
+      <DependentUpon>LineSections.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
