@@ -43,20 +43,19 @@ namespace PyQSOFit_SBLg
             this.label4 = new System.Windows.Forms.Label();
             this.Button_RunFit = new System.Windows.Forms.Button();
             this.Button_Clear = new System.Windows.Forms.Button();
-            this.RichText_FitDataValues = new System.Windows.Forms.RichTextBox();
             this.CheckList_FitDataName = new System.Windows.Forms.CheckedListBox();
             this.RichText_Console = new System.Windows.Forms.RichTextBox();
             this.Button_View = new System.Windows.Forms.Button();
             this.Option_Objects = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.Button_ObjectAdd = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.Option_ConfigLines = new System.Windows.Forms.ComboBox();
             this.Button_ConfigUpdate = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.Button_Value = new System.Windows.Forms.Button();
+            this.Val_ErrorCount = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.Check_Error = new System.Windows.Forms.CheckBox();
             this.Panel_NormalFitConfig = new System.Windows.Forms.Panel();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -93,11 +92,13 @@ namespace PyQSOFit_SBLg
             this.label5 = new System.Windows.Forms.Label();
             this.Option_ConfigConti = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.Button_SaveFObject = new System.Windows.Forms.Button();
             this.Config_Main = new PyQSOFit_SBLg.ConfigDisplay();
             this.WaveDisp_Default = new PyQSOFit_SBLg.WavelengthLine();
+            this.Button_ResultsOpen = new System.Windows.Forms.Button();
+            this.Text_ResultPath = new System.Windows.Forms.TextBox();
+            this.Button_ResultsShow = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Val_ErrorCount)).BeginInit();
             this.Panel_NormalFitConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VAL_CFTstrength)).BeginInit();
             this.SuspendLayout();
@@ -201,7 +202,7 @@ namespace PyQSOFit_SBLg
             // Button_RunFit
             // 
             this.Button_RunFit.Enabled = false;
-            this.Button_RunFit.Location = new System.Drawing.Point(171, 476);
+            this.Button_RunFit.Location = new System.Drawing.Point(151, 476);
             this.Button_RunFit.Name = "Button_RunFit";
             this.Button_RunFit.Size = new System.Drawing.Size(45, 23);
             this.Button_RunFit.TabIndex = 11;
@@ -211,23 +212,13 @@ namespace PyQSOFit_SBLg
             // 
             // Button_Clear
             // 
-            this.Button_Clear.Location = new System.Drawing.Point(106, 39);
+            this.Button_Clear.Location = new System.Drawing.Point(259, 12);
             this.Button_Clear.Name = "Button_Clear";
             this.Button_Clear.Size = new System.Drawing.Size(75, 23);
             this.Button_Clear.TabIndex = 13;
             this.Button_Clear.Text = "Clear";
             this.Button_Clear.UseVisualStyleBackColor = true;
             this.Button_Clear.Click += new System.EventHandler(this.Button_Clear_Click);
-            // 
-            // RichText_FitDataValues
-            // 
-            this.RichText_FitDataValues.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.RichText_FitDataValues.Location = new System.Drawing.Point(12, 695);
-            this.RichText_FitDataValues.Name = "RichText_FitDataValues";
-            this.RichText_FitDataValues.Size = new System.Drawing.Size(336, 113);
-            this.RichText_FitDataValues.TabIndex = 14;
-            this.RichText_FitDataValues.Text = "";
             // 
             // CheckList_FitDataName
             // 
@@ -236,10 +227,10 @@ namespace PyQSOFit_SBLg
             this.CheckList_FitDataName.CheckOnClick = true;
             this.CheckList_FitDataName.ColumnWidth = 150;
             this.CheckList_FitDataName.FormattingEnabled = true;
-            this.CheckList_FitDataName.Location = new System.Drawing.Point(12, 580);
+            this.CheckList_FitDataName.Location = new System.Drawing.Point(11, 594);
             this.CheckList_FitDataName.MultiColumn = true;
             this.CheckList_FitDataName.Name = "CheckList_FitDataName";
-            this.CheckList_FitDataName.Size = new System.Drawing.Size(336, 109);
+            this.CheckList_FitDataName.Size = new System.Drawing.Size(336, 184);
             this.CheckList_FitDataName.TabIndex = 15;
             this.CheckList_FitDataName.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckList_FitDataName_ItemCheck);
             this.CheckList_FitDataName.Resize += new System.EventHandler(this.CheckList_FitDataName_Resize);
@@ -261,11 +252,11 @@ namespace PyQSOFit_SBLg
             // Button_View
             // 
             this.Button_View.Enabled = false;
-            this.Button_View.Location = new System.Drawing.Point(223, 476);
+            this.Button_View.Location = new System.Drawing.Point(203, 476);
             this.Button_View.Name = "Button_View";
             this.Button_View.Size = new System.Drawing.Size(45, 23);
             this.Button_View.TabIndex = 17;
-            this.Button_View.Text = "View";
+            this.Button_View.Text = "Plot";
             this.Button_View.UseVisualStyleBackColor = true;
             this.Button_View.Click += new System.EventHandler(this.Button_View_Click);
             // 
@@ -287,16 +278,6 @@ namespace PyQSOFit_SBLg
             this.label1.Size = new System.Drawing.Size(49, 17);
             this.label1.TabIndex = 19;
             this.label1.Text = "Object";
-            // 
-            // Button_ObjectAdd
-            // 
-            this.Button_ObjectAdd.Location = new System.Drawing.Point(259, 11);
-            this.Button_ObjectAdd.Name = "Button_ObjectAdd";
-            this.Button_ObjectAdd.Size = new System.Drawing.Size(63, 23);
-            this.Button_ObjectAdd.TabIndex = 20;
-            this.Button_ObjectAdd.Text = "Update";
-            this.Button_ObjectAdd.UseVisualStyleBackColor = true;
-            this.Button_ObjectAdd.Click += new System.EventHandler(this.Button_ObjectAdd_Click);
             // 
             // label2
             // 
@@ -330,9 +311,10 @@ namespace PyQSOFit_SBLg
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.numericUpDown2);
+            this.panel1.Controls.Add(this.Button_Value);
+            this.panel1.Controls.Add(this.Val_ErrorCount);
             this.panel1.Controls.Add(this.label7);
-            this.panel1.Controls.Add(this.checkBox1);
+            this.panel1.Controls.Add(this.Check_Error);
             this.panel1.Controls.Add(this.Panel_NormalFitConfig);
             this.panel1.Controls.Add(this.VAL_CFTstrength);
             this.panel1.Controls.Add(this.Label_CFTstrength);
@@ -356,27 +338,46 @@ namespace PyQSOFit_SBLg
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.Button_FileOpen);
             this.panel1.Controls.Add(this.Text_FilePath);
-            this.panel1.Location = new System.Drawing.Point(12, 68);
+            this.panel1.Location = new System.Drawing.Point(11, 70);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(336, 506);
+            this.panel1.Size = new System.Drawing.Size(336, 510);
             this.panel1.TabIndex = 27;
             // 
-            // numericUpDown2
+            // Button_Value
             // 
-            this.numericUpDown2.Increment = new decimal(new int[] {
+            this.Button_Value.Enabled = false;
+            this.Button_Value.Location = new System.Drawing.Point(254, 476);
+            this.Button_Value.Name = "Button_Value";
+            this.Button_Value.Size = new System.Drawing.Size(45, 23);
+            this.Button_Value.TabIndex = 42;
+            this.Button_Value.Text = "Value";
+            this.Button_Value.UseVisualStyleBackColor = true;
+            this.Button_Value.Click += new System.EventHandler(this.Button_Value_Click);
+            // 
+            // Val_ErrorCount
+            // 
+            this.Val_ErrorCount.Enabled = false;
+            this.Val_ErrorCount.Increment = new decimal(new int[] {
             5,
             0,
             0,
             0});
-            this.numericUpDown2.Location = new System.Drawing.Point(165, 367);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
+            this.Val_ErrorCount.Location = new System.Drawing.Point(165, 367);
+            this.Val_ErrorCount.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDown2.TabIndex = 41;
+            this.Val_ErrorCount.Name = "Val_ErrorCount";
+            this.Val_ErrorCount.Size = new System.Drawing.Size(50, 20);
+            this.Val_ErrorCount.TabIndex = 41;
+            this.Val_ErrorCount.Tag = "n_trails";
+            this.Val_ErrorCount.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.Val_ErrorCount.ValueChanged += new System.EventHandler(this.VAL_CFTstrength_ValueChanged);
             // 
             // label7
             // 
@@ -387,16 +388,17 @@ namespace PyQSOFit_SBLg
             this.label7.TabIndex = 40;
             this.label7.Text = "Bootstrap Count";
             // 
-            // checkBox1
+            // Check_Error
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(15, 370);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(53, 17);
-            this.checkBox1.TabIndex = 39;
-            this.checkBox1.Tag = "CFT";
-            this.checkBox1.Text = "Errors";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.Check_Error.AutoSize = true;
+            this.Check_Error.Location = new System.Drawing.Point(15, 370);
+            this.Check_Error.Name = "Check_Error";
+            this.Check_Error.Size = new System.Drawing.Size(53, 17);
+            this.Check_Error.TabIndex = 39;
+            this.Check_Error.Tag = "MC";
+            this.Check_Error.Text = "Errors";
+            this.Check_Error.UseVisualStyleBackColor = true;
+            this.Check_Error.CheckedChanged += new System.EventHandler(this.Check_Error_CheckedChanged);
             // 
             // Panel_NormalFitConfig
             // 
@@ -659,6 +661,8 @@ namespace PyQSOFit_SBLg
             // Check_hostdecomp
             // 
             this.Check_hostdecomp.AutoSize = true;
+            this.Check_hostdecomp.Checked = true;
+            this.Check_hostdecomp.CheckState = System.Windows.Forms.CheckState.Checked;
             this.Check_hostdecomp.Location = new System.Drawing.Point(2, 3);
             this.Check_hostdecomp.Name = "Check_hostdecomp";
             this.Check_hostdecomp.Size = new System.Drawing.Size(121, 17);
@@ -666,10 +670,13 @@ namespace PyQSOFit_SBLg
             this.Check_hostdecomp.Tag = "decomposition_host";
             this.Check_hostdecomp.Text = "Host Decomposition";
             this.Check_hostdecomp.UseVisualStyleBackColor = true;
+            this.Check_hostdecomp.CheckedChanged += new System.EventHandler(this.Check_ContiParamCheckedChanged);
             // 
             // Check_PL
             // 
             this.Check_PL.AutoSize = true;
+            this.Check_PL.Checked = true;
+            this.Check_PL.CheckState = System.Windows.Forms.CheckState.Checked;
             this.Check_PL.Location = new System.Drawing.Point(2, 129);
             this.Check_PL.Name = "Check_PL";
             this.Check_PL.Size = new System.Drawing.Size(79, 17);
@@ -677,10 +684,13 @@ namespace PyQSOFit_SBLg
             this.Check_PL.Tag = "PL";
             this.Check_PL.Text = "Power Law";
             this.Check_PL.UseVisualStyleBackColor = true;
+            this.Check_PL.CheckedChanged += new System.EventHandler(this.Check_ContiParamCheckedChanged);
             // 
             // Check_poly
             // 
             this.Check_poly.AutoSize = true;
+            this.Check_poly.Checked = true;
+            this.Check_poly.CheckState = System.Windows.Forms.CheckState.Checked;
             this.Check_poly.Location = new System.Drawing.Point(226, 3);
             this.Check_poly.Name = "Check_poly";
             this.Check_poly.Size = new System.Drawing.Size(76, 17);
@@ -688,6 +698,7 @@ namespace PyQSOFit_SBLg
             this.Check_poly.Tag = "poly";
             this.Check_poly.Text = "Polynomial";
             this.Check_poly.UseVisualStyleBackColor = true;
+            this.Check_poly.CheckedChanged += new System.EventHandler(this.Check_ContiParamCheckedChanged);
             // 
             // Check_Fe
             // 
@@ -699,10 +710,13 @@ namespace PyQSOFit_SBLg
             this.Check_Fe.Tag = "Fe_uv_op";
             this.Check_Fe.Text = "Fe II Emissions";
             this.Check_Fe.UseVisualStyleBackColor = true;
+            this.Check_Fe.CheckedChanged += new System.EventHandler(this.Check_ContiParamCheckedChanged);
             // 
             // Check_BC
             // 
             this.Check_BC.AutoSize = true;
+            this.Check_BC.Checked = true;
+            this.Check_BC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.Check_BC.Location = new System.Drawing.Point(129, 3);
             this.Check_BC.Name = "Check_BC";
             this.Check_BC.Size = new System.Drawing.Size(88, 17);
@@ -710,6 +724,7 @@ namespace PyQSOFit_SBLg
             this.Check_BC.Tag = "BC";
             this.Check_BC.Text = "Balmer Conti.";
             this.Check_BC.UseVisualStyleBackColor = true;
+            this.Check_BC.CheckedChanged += new System.EventHandler(this.Check_ContiParamCheckedChanged);
             // 
             // VAL_CFTstrength
             // 
@@ -734,6 +749,7 @@ namespace PyQSOFit_SBLg
             0,
             0});
             this.VAL_CFTstrength.Visible = false;
+            this.VAL_CFTstrength.ValueChanged += new System.EventHandler(this.VAL_CFTstrength_ValueChanged);
             // 
             // Label_CFTstrength
             // 
@@ -760,7 +776,7 @@ namespace PyQSOFit_SBLg
             // Button_CreateFobject
             // 
             this.Button_CreateFobject.Enabled = false;
-            this.Button_CreateFobject.Location = new System.Drawing.Point(55, 476);
+            this.Button_CreateFobject.Location = new System.Drawing.Point(35, 476);
             this.Button_CreateFobject.Name = "Button_CreateFobject";
             this.Button_CreateFobject.Size = new System.Drawing.Size(110, 23);
             this.Button_CreateFobject.TabIndex = 29;
@@ -785,6 +801,7 @@ namespace PyQSOFit_SBLg
             this.Option_ConfigConti.Name = "Option_ConfigConti";
             this.Option_ConfigConti.Size = new System.Drawing.Size(185, 21);
             this.Option_ConfigConti.TabIndex = 26;
+            this.Option_ConfigConti.SelectedIndexChanged += new System.EventHandler(this.Option_ConfigConti_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -795,16 +812,6 @@ namespace PyQSOFit_SBLg
             this.label3.Size = new System.Drawing.Size(42, 17);
             this.label3.TabIndex = 25;
             this.label3.Text = "Lines";
-            // 
-            // Button_SaveFObject
-            // 
-            this.Button_SaveFObject.Location = new System.Drawing.Point(12, 39);
-            this.Button_SaveFObject.Name = "Button_SaveFObject";
-            this.Button_SaveFObject.Size = new System.Drawing.Size(88, 23);
-            this.Button_SaveFObject.TabIndex = 28;
-            this.Button_SaveFObject.Text = "Save Fit Object";
-            this.Button_SaveFObject.UseVisualStyleBackColor = true;
-            this.Button_SaveFObject.Click += new System.EventHandler(this.Button_SaveFobject_Click);
             // 
             // Config_Main
             // 
@@ -837,21 +844,49 @@ namespace PyQSOFit_SBLg
             this.WaveDisp_Default.Size = new System.Drawing.Size(1010, 419);
             this.WaveDisp_Default.TabIndex = 25;
             // 
+            // Button_ResultsOpen
+            // 
+            this.Button_ResultsOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Button_ResultsOpen.Location = new System.Drawing.Point(11, 41);
+            this.Button_ResultsOpen.Name = "Button_ResultsOpen";
+            this.Button_ResultsOpen.Size = new System.Drawing.Size(75, 23);
+            this.Button_ResultsOpen.TabIndex = 31;
+            this.Button_ResultsOpen.Text = "Results";
+            this.Button_ResultsOpen.UseVisualStyleBackColor = true;
+            // 
+            // Text_ResultPath
+            // 
+            this.Text_ResultPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Text_ResultPath.Location = new System.Drawing.Point(92, 41);
+            this.Text_ResultPath.Name = "Text_ResultPath";
+            this.Text_ResultPath.Size = new System.Drawing.Size(255, 23);
+            this.Text_ResultPath.TabIndex = 32;
+            // 
+            // Button_ResultsShow
+            // 
+            this.Button_ResultsShow.Location = new System.Drawing.Point(138, 785);
+            this.Button_ResultsShow.Name = "Button_ResultsShow";
+            this.Button_ResultsShow.Size = new System.Drawing.Size(75, 23);
+            this.Button_ResultsShow.TabIndex = 33;
+            this.Button_ResultsShow.Text = "Show";
+            this.Button_ResultsShow.UseVisualStyleBackColor = true;
+            this.Button_ResultsShow.Click += new System.EventHandler(this.Button_ResultsShow_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1383, 820);
-            this.Controls.Add(this.Button_SaveFObject);
+            this.Controls.Add(this.Button_ResultsShow);
+            this.Controls.Add(this.Button_ResultsOpen);
+            this.Controls.Add(this.Text_ResultPath);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.Config_Main);
             this.Controls.Add(this.WaveDisp_Default);
-            this.Controls.Add(this.Button_ObjectAdd);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Option_Objects);
             this.Controls.Add(this.RichText_Console);
             this.Controls.Add(this.CheckList_FitDataName);
-            this.Controls.Add(this.RichText_FitDataValues);
             this.Controls.Add(this.Button_Clear);
             this.Name = "Main";
             this.Text = "Main";
@@ -860,7 +895,7 @@ namespace PyQSOFit_SBLg
             this.Shown += new System.EventHandler(this.Main_Shown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Val_ErrorCount)).EndInit();
             this.Panel_NormalFitConfig.ResumeLayout(false);
             this.Panel_NormalFitConfig.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VAL_CFTstrength)).EndInit();
@@ -883,13 +918,11 @@ namespace PyQSOFit_SBLg
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Button_RunFit;
         private System.Windows.Forms.Button Button_Clear;
-        private System.Windows.Forms.RichTextBox RichText_FitDataValues;
         private System.Windows.Forms.CheckedListBox CheckList_FitDataName;
         private System.Windows.Forms.RichTextBox RichText_Console;
         private System.Windows.Forms.Button Button_View;
         private System.Windows.Forms.ComboBox Option_Objects;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button Button_ObjectAdd;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox Option_ConfigLines;
         private System.Windows.Forms.Button Button_ConfigUpdate;
@@ -900,13 +933,12 @@ namespace PyQSOFit_SBLg
         private System.Windows.Forms.ComboBox Option_ConfigConti;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button Button_CreateFobject;
-        private System.Windows.Forms.Button Button_SaveFObject;
         private System.Windows.Forms.NumericUpDown VAL_CFTstrength;
         private System.Windows.Forms.Label Label_CFTstrength;
         private System.Windows.Forms.CheckBox Check_CFT;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown Val_ErrorCount;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox Check_Error;
         private System.Windows.Forms.Panel Panel_NormalFitConfig;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
@@ -936,5 +968,9 @@ namespace PyQSOFit_SBLg
         private System.Windows.Forms.CheckBox Check_poly;
         private System.Windows.Forms.CheckBox Check_Fe;
         private System.Windows.Forms.CheckBox Check_BC;
+        private System.Windows.Forms.Button Button_Value;
+        private System.Windows.Forms.Button Button_ResultsOpen;
+        private System.Windows.Forms.TextBox Text_ResultPath;
+        private System.Windows.Forms.Button Button_ResultsShow;
     }
 }

@@ -360,7 +360,8 @@ namespace PyQSOFit_SBLg
         {
             foreach (Control xobj in infoall)
             {
-                if (doText) xobj.Text = "";
+                if (doText && xobj is TextBox xtext) xtext.Text = "";
+                if (doText && xobj is ComboBox xoption) xoption.SelectedIndex = -1;
                 if (doColour) xobj.ForeColor = SystemColors.ControlText;
             }
         }

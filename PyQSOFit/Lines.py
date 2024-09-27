@@ -4,10 +4,11 @@ from typing import Tuple
 from astropy import units as u
 from astropy import constants as const
 from scipy import interpolate
-from scipy.stats import median_abs_deviation as mad
 
 from Spectra_handling.Spectrum_utls import skewed_voigt
 import sys
+
+from rebin_spec import rebin_spec
 
 cspeed = const.c.to(u.km / u.s).value  # km/s
 
@@ -245,7 +246,7 @@ class LineFit:
             # initial parameter definition
             lmpargs = [np.log(self.twave), self.tline_flux, self.terr]
             self.line_fit = minimize(self.residuals_line, self.iparams, args=lmpargs, calc_covar=False)
-            self.fparams = self.tmpparams
+            self.fparams = self.tmpparams.copy()
             self.gauss_line = manygauss(np.log(self.twave), self.fparams)
             if self.MC and self.n_trails > 0:
                 self.mc_fit(self.line_fit, conti)
@@ -363,15 +364,15 @@ class LineFit:
             tmp_fwhm = np.zeros(self.n_line)
             tmp_peak = np.zeros(self.n_line)
             pps = np.split(pp, len(self.tlinelist['compname']))
-
             for i, xx in enumerate(pps):
                 tmp_fwhm[i] = LineProperties(self.twave, xx).fwhm
                 tmp_peak[i] = LineProperties(self.twave, xx).peak
+
             return tmp_fwhm, tmp_peak
 
         def mc_fit(self, ini_fit, conti):
             samples = np.zeros((self.n_trails, len(self.iparams)))
-            rms_line = self.tline_flux - manygauss(self.twave, self.fparams)
+            rms_line = self.tline_flux - self.gauss_line
             noise = noise_calculator(rms_line)
 
             for k in range(self.n_trails):
@@ -381,9 +382,8 @@ class LineFit:
                 flux_resampled = self.tline_flux + ctm_poly(self.twave)
 
                 conti_fit = minimize(self.residuals_line, ini_fit.params,
-                                     args=(self.twave, flux_resampled, self.terr), calc_covar=False)
-
-                samples[k] = self.tmpparams
+                                     args=(np.log(self.twave), flux_resampled, self.terr), calc_covar=False)
+                samples[k] = self.tmpparams.copy()
 
             self.fparams_samples = samples
 
@@ -396,33 +396,23 @@ class LineFit:
         @property
         def fwhms_error(self) -> np.array:
             if self._fwhms_error is None:
-                fwhm_err = np.empty(self.n_trails, dtype=float)
-                peak_err = np.empty(self.n_trails, dtype=float)
-                for i, pp in enumerate(self.fparams_samples):
-                    fwhm_s, peak_s = self._calculate_FWHM_peak(pp)
-                    fwhm_err[i] = 1.4826 * mad(fwhm_s, 0)
-                    peak_err[i] = 1.4826 * mad(peak_s, 0)
-                self._fwhms_error, self._peaks_error = fwhm_err, peak_err
+                fwhm_s, peak_s = zip(*(self._calculate_FWHM_peak(pp) for pp in self.fparams_samples))
+                self._fwhms_error = np.std(fwhm_s, 0)
+                self._peaks_error = np.std(peak_s, 0)
             return self._fwhms_error
 
         @property
         def peaks_error(self) -> np.array:
             if self._peaks_error is None:
-                fwhm_err = np.empty(self.n_trails, dtype=float)
-                peak_err = np.empty(self.n_trails, dtype=float)
-                for i, pp in enumerate(self.fparams_samples):
-                    fwhm_s, peak_s = self._calculate_FWHM_peak(pp)
-                    fwhm_err[i] = 1.4826 * mad(fwhm_s, 0)
-                    peak_err[i] = 1.4826 * mad(peak_s, 0)
-                self._fwhms_error, self._peaks_error = fwhm_err, peak_err
+                fwhm_s, peak_s = zip(*(self._calculate_FWHM_peak(pp) for pp in self.fparams_samples))
+                self._fwhms_error = np.std(fwhm_s, 0)
+                self._peaks_error = np.std(peak_s, 0)
             return self._peaks_error
 
         @property
         def fparams_errors(self) -> np.array:
-            all_pp_1comp = np.zeros(len(self.iparams) * self.n_trails).reshape(len(self.iparams), self.n_trails)
-            all_pp_std = np.zeros(len(self.iparams))
-            for st in range(len(self.iparams)):
-                all_pp_std[st] = 1.4826 * mad(all_pp_1comp[st, :])
+            all_pp_std = np.std(self.fparams_samples, 0)
+            for st in range(len(all_pp_std)):
                 if (st - 1) % 5 == 0:
                     all_pp_std[st] = self.peaks_error[int(st / 5)]
             return all_pp_std
@@ -442,7 +432,6 @@ class LineFit:
                                      for i, j in enumerate(e_params)])
 
                 self._fitting_result = array_interlace(values, errors)
-
             return self._fitting_result
 
         @property
@@ -480,7 +469,8 @@ class LineProperties:
 
         self.cen, self.sig, self.skw = None, None, None
         self.line_gaussian_pp()
-        self.wave, self.line_profile = self.line_model_compute(wave)
+        self.wave = wave
+        self.line_profile = self.line_model_compute(wave)
 
         self._area, self._ew = None, None
         xkeys = ['fwhm', 'sigma', 'skewness', 'EW', 'Peak', 'Area']
@@ -501,13 +491,9 @@ class LineProperties:
 
     def line_model_compute(self, wave: np.array) -> Tuple[np.array, np.array]:
         """Computes the wavelength and corresponding spectrum values."""
-        disp = np.diff(wave)[0]
-        left = wave.min()
-        right = wave.max()
-        xx = np.arange(left, right + disp, disp)
-        xlog = np.log(xx)
+        xlog = np.log(wave)
         yy = manygauss(xlog, self.pp)
-        return xx, yy
+        return yy
 
     def line_peak(self):
         xx = self.wave
@@ -535,15 +521,15 @@ class LineProperties:
     def line_error_calculate(self, name_id: list, err_id: list,
                              line_res: np.array, conti_res: np.array) -> np.array:
         """Perform basic error analysis calculations of the line"""
-        scale = float(line_res[name_id[1]])
+        scale = float(line_res[name_id[0]])
 
-        if conti_res[7] != 0:
+        if not conti_res is None and conti_res[7] != 0:
             conti_error = conti_res[8] / conti_res[7]
         else:
             conti_error = 0
 
         err_peak = float(line_res[err_id[2]])
-        err_sig = self.sigma * float(err_id[0]) / self.fwhm
+        err_sig = self.sigma * float(line_res[err_id[0]]) / self.fwhm
         err_fwhm = float(line_res[err_id[0]])
         err_skw = -999 if self.skew == -999 else float(line_res[err_id[4]])
         err_scale = float(line_res[err_id[1]])

@@ -46,5 +46,14 @@ Continuum Display
 
 Fit object
 	- Ui <
+	- Functionality <
+	- Python end <
+	- Single Result Display <
+	- Errors
+	- Single Object Save
+
+Multi FitObject
+	- UI
 	- Functionality
 	- Python end
+	- Multi Result Display

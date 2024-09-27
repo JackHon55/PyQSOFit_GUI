@@ -140,6 +140,8 @@ class SixDFGSFitter:
         save_path: str, optional
             If provided, will create, if file does not exist, and append results.
         """
+
+
         r_index = 1 if save_error else 0
         tmp_results = [i[r_index] for i in results]
         if save_properties is None:
@@ -180,18 +182,10 @@ class SixDFGSFitter:
         end = timeit.default_timer()
         print('Fitting finished in : ' + str(np.round(end - start)) + 's')
 
-        a = self.q.line_result_output('Hb_br')
-        b = self.q.line_result_output('Hb_na')
-        c = self.q.line_result_output('OIII5007c')
-
-        d = self.q.line_result_output('Ha_br')
-        e = self.q.line_result_output('NII6549c')
-
-        self.save_result(self.spec_name, [a, b, c, d, e], save_properties=['fwhm', 'skew', 'peak', 'area', 'ew'],
-                         save_path=os.getcwd() + "/fitting_results.txt", save_error=False)
-
 print("Ready to fit!")
 '''a = SixDFGSFitter(file_path='test_spectra/0022878_1d.fits', spec_name='22878', z=0.06915)
 a.reset_output_spectrum()
 a.trim_spec((4000, 7000))
-a.fit('fitting_configs/Default.xml', 'conti_configs/Default.txt', CFT=True)'''
+a.fit('fitting_configs/Default.xml', 'conti_configs/Default.txt',
+      contiparams={}, fittingparams={'PL':True, 'poly':True, 'decomposition_host':True, 'BC':True,
+                                     'MC':True, 'n_trails':15})'''

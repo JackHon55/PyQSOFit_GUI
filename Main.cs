@@ -9,6 +9,7 @@ using Microsoft.VisualBasic;
 using PyQSOFit_SBLg.Properties;
 using System.Drawing;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace PyQSOFit_SBLg
 {
@@ -55,6 +56,7 @@ namespace PyQSOFit_SBLg
             Config_Main.ConfigDisplay_Shown();
             WaveDisp_Default.Path_ContiFolder = wkd + "conti_configs";
             WaveDisp_Default.WavelengthLine_Shown();
+            Text_ResultPath.Text = wkd + "results";
         }
 
         public static string wkd
@@ -87,8 +89,8 @@ namespace PyQSOFit_SBLg
                 Button_CreateFobject.Enabled = true;
                 Button_RunFit.Enabled = false;
                 Button_View.Enabled = false;
+                Button_Value.Enabled = false;
             }
-
         }
 
         private void Button_RunFit_Click(object sender, EventArgs e)
@@ -96,7 +98,6 @@ namespace PyQSOFit_SBLg
             Reset_Quick();
             fobject xobj = Dict_fobject[Option_Objects.SelectedItem.ToString()];
             xobj.fit();
-            Button_View.Enabled = true;
         }
 
         private void Save_SpecConfig()
@@ -105,13 +106,37 @@ namespace PyQSOFit_SBLg
 
             if (!Dict_fobject.ContainsKey(spec_name))
             {
-                Dict_fobject.Add(spec_name, new fobject { });
+                fobject xobject = new fobject { };
+                xobject.Created_StateChanged += fobject_Created;
+                xobject.Fitted_StateChanged += fobject_Fitted;
+                Dict_fobject.Add(spec_name, xobject);
             }
 
             fobject xfit = Dict_fobject[spec_name];
             Save_SpecBasicConfig(xfit);
             Save_SpecContiConfig(xfit);
+        }
 
+        private void fobject_Created(object sender, EventArgs e)
+        {
+            fobject xobj = sender as fobject;
+            if (xobj.Created) Button_RunFit.Enabled = true;
+            else Button_RunFit.Enabled = false;
+        }
+
+        private void fobject_Fitted(object sender, EventArgs e)
+        {
+            fobject xobj = sender as fobject;
+            if (xobj.Fitted)
+            {
+                Button_View.Enabled = true;
+                Button_Value.Enabled = true;
+            }
+            else
+            {
+                Button_View.Enabled = false;
+                Button_Value.Enabled = false;
+            }
         }
 
         private void Save_SpecBasicConfig(fobject xfit)
@@ -129,6 +154,9 @@ namespace PyQSOFit_SBLg
         {
             xfit.kwargs.Clear();
             xfit.contiparams.Clear();
+
+            if (Check_Error.Checked) xfit.kwargs.Add($"'{Check_Error.Tag}':True, '{Val_ErrorCount.Tag}': {Val_ErrorCount.Value}");
+
             if (Check_CFT.Checked) xfit.kwargs.Add($"'{Check_CFT.Tag}':True, '{VAL_CFTstrength.Tag}': {VAL_CFTstrength.Value}");
 
             if (!Panel_NormalFitConfig.Enabled) return;
@@ -176,8 +204,16 @@ namespace PyQSOFit_SBLg
             while ((line = await PythonOutput.ReadLineAsync()) != null)
             {
                 AppendTextToTextBox(line + Environment.NewLine);
-                if (line.Contains("RES:")) PyQSOFit_Output_Reader(line);
-                if (line.Contains("Preview Ready")) Reset_WaveSpecDisp();
+                if (line.Contains("Preview Ready"))
+                {
+                    if (InvokeRequired) Invoke(new Action(UI_DoneCreating));
+                    else UI_DoneCreating();
+                }
+                if (line.Contains("Fitting finished"))
+                {
+                    if (InvokeRequired) Invoke(new Action(UI_DoneFitting));
+                    else UI_DoneFitting();
+                }
             }
             return line;
         }
@@ -195,37 +231,6 @@ namespace PyQSOFit_SBLg
             }
         }
 
-
-        private void PyQSOFit_Output_Reader(string line)
-        {
-            line = line.Split(':')[1];
-            List<string> line_data = line.Split('\t').ToList();
-
-            Dictionary<string, float> xdict = Dict_fobject[Text_PropName.Text].Dict_FitResult;
-            xdict.Clear();
-
-            int i = 1;
-            foreach (string xline in line_names)
-            {
-                foreach (string xprop in line_prop)
-                {
-                    xdict.Add($"{xline}_{xprop}", float.Parse(line_data[i]));
-                    if (CheckList_FitDataName.InvokeRequired)
-                    {
-                        CheckList_FitDataName.Invoke(new Action(() =>
-                            CheckList_FitDataName.Items.Add($"{xline}_{xprop}", true)
-                        ));
-                    }
-                    else
-                    {
-                        CheckList_FitDataName.Items.Add($"{xline}_{xprop}", true);
-                    }
-                    i++;
-                }
-            }
-        }
-
-
         private void Button_Clear_Click(object sender, EventArgs e)
         {
             Option_Objects.Items.Clear();
@@ -242,25 +247,12 @@ namespace PyQSOFit_SBLg
 
         private void Reset_Quick()
         {
-            RichText_FitDataValues.Clear();
             CheckList_FitDataName.Items.Clear();
         }
 
 
         private void CheckList_FitDataName_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            CheckedListBox obj = sender as CheckedListBox;
-            Dictionary<string, float> xdict = Dict_fobject[Text_PropName.Text].Dict_FitResult;
-            RichText_FitDataValues.Clear();
-            obj.BeginInvoke(new Action(() =>
-            {
-                List<float> print_data = new List<float>();
-                foreach (string xprop in obj.CheckedItems)
-                {
-                    print_data.Add(xdict[xprop]);
-                }
-                RichText_FitDataValues.Text = String.Join("\t", print_data.ToArray());
-            }));
 
         }
 
@@ -270,14 +262,12 @@ namespace PyQSOFit_SBLg
             xobj.plot();
         }
 
-        private void Button_ObjectAdd_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void Option_Objects_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox xoption = sender as ComboBox;
+            if (xoption.SelectedIndex == -1) return;
+
             fobject xobj = Dict_fobject[xoption.SelectedItem.ToString()];
             Reset();
             Text_FilePath.Text = xobj.spec_path;
@@ -287,12 +277,18 @@ namespace PyQSOFit_SBLg
             Text_PropFitRangeB.Text = xobj.trimB.ToString();
             WaveDisp_Default.MinValue = (int)xobj.trimA;
             WaveDisp_Default.MaxValue = (int)xobj.trimB;
+
+            foreach (string xitem in Option_ConfigLines.Items)
+            {
+                if (xobj.line_config.Contains(xitem)) Option_ConfigLines.SelectedItem = xitem;
+            }
+
+            foreach (string xitem in Option_ConfigConti.Items)
+            {
+                if (xobj.conti_config.Contains(xitem)) Option_ConfigConti.SelectedItem = xitem;
+            }
+
             xobj.preview(WaveDisp_Default.ImgW, WaveDisp_Default.ImgH);
-        }
-
-        private void Button_SaveConfig_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void Button_ConfigUpdate_Click(object sender, EventArgs e)
@@ -351,16 +347,23 @@ namespace PyQSOFit_SBLg
             WaveDisp_Default.MaxValue = 7000;
         }
 
-        private void Reset_WaveSpecDisp()
+        private void UI_DoneCreating()
         {
             using (FileStream fs = new FileStream(wkd + "fitting_plots/tmp.png", FileMode.Open, FileAccess.Read))
             {
-                WaveDisp_Default.Preview_Image = Image.FromStream(fs); // Create a copy in memory to avoid locking
+                WaveDisp_Default.Preview_Image = Image.FromStream(fs); 
             }
+            Dict_fobject[Text_PropName.Text].Created = true;
+        }
+
+        private void UI_DoneFitting()
+        {
+            Dict_fobject[Text_PropName.Text].Fitted = true;
         }
 
         private void Option_Config_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!String.IsNullOrEmpty(Text_PropName.Text)) Dict_fobject[Text_PropName.Text].Created = false;
             ComboBox xoption = sender as ComboBox;
             if (xoption.SelectedIndex == -1) { return; }
             List<int> line_list = new List<int> { };
@@ -391,22 +394,19 @@ namespace PyQSOFit_SBLg
             try
             {
                 Save_SpecConfig();
-                Button_RunFit.Enabled = true;
                 Option_Objects.Items.Clear();
                 Option_Objects.Items.AddRange(Dict_fobject.Keys.ToArray());
                 Option_Objects.SelectedIndex = Option_Objects.Items.Count - 1;
-
+                Dict_fobject[Text_PropName.Text].result_path = Pypath.T($"{Text_ResultPath.Text}/{Text_PropName.Text}.xml");
+                Dict_fobject[Text_PropName.Text].FitResults = null;
+                ///Dict_fobject[Text_PropName.Text].Created = true;
             }
             catch (Exception) { }
         }
 
-        private void Button_SaveFobject_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Check_CFT_CheckedChanged(object sender, EventArgs e)
         {
+            Dict_fobject[Text_PropName.Text].Created = false;
             if (Check_CFT.Checked)
             {
                 Panel_NormalFitConfig.Enabled = false;
@@ -424,6 +424,7 @@ namespace PyQSOFit_SBLg
         private void Text_FePLParam_TextChanged(object sender, EventArgs e)
         {
             TextBox xtext = sender as TextBox;
+            Dict_fobject[Text_PropName.Text].Created = false;
             if (xtext.Tag as string == xtext.Text)
             {
                 xtext.ForeColor = SystemColors.WindowText;
@@ -432,6 +433,67 @@ namespace PyQSOFit_SBLg
             {
                 xtext.ForeColor = Color.Red;
             }
+        }
+
+        private void Button_ResultsOpen_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+            {
+                folderDialog.Description = "Select a directory to save the file.";
+                folderDialog.ShowNewFolderButton = true; // Allow the creation of new folders
+                folderDialog.SelectedPath = wkd + "results";
+                // Show the dialog and get the result
+                DialogResult result = folderDialog.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
+                {
+                    // The user selected a valid directory
+                    Text_ResultPath.Text = folderDialog.SelectedPath;
+                }
+            }
+        }
+
+        private void Button_Value_Click(object sender, EventArgs e)
+        {
+            CheckList_FitDataName.Items.Clear();
+            CheckList_FitDataName.Items.AddRange(Dict_fobject[Text_PropName.Text].FitResults.Keys.ToArray());
+            for (int i = 0; i < CheckList_FitDataName.Items.Count; i++)
+            {
+                CheckList_FitDataName.SetItemChecked(i, true); // Check each item
+            }
+        }
+
+        private void Button_ResultsShow_Click(object sender, EventArgs e)
+        {
+            List<float> values = new List<float> { };
+            foreach (string xvalue in CheckList_FitDataName.CheckedItems)
+            {
+                values.Add(Dict_fobject[Text_PropName.Text].FitResults[xvalue]);
+            }
+            RichText_Console.AppendText(String.Join("\t", values) + "\n");
+            RichText_Console.ScrollToCaret();
+        }
+
+        private void Check_Error_CheckedChanged(object sender, EventArgs e)
+        {
+            Dict_fobject[Text_PropName.Text].Created = false;
+            if (Check_Error.Checked) Val_ErrorCount.Enabled = true;
+            else Val_ErrorCount.Enabled = false;
+        }
+
+        private void Check_ContiParamCheckedChanged(object sender, EventArgs e)
+        {
+            Dict_fobject[Text_PropName.Text].Created = false;
+        }
+
+        private void VAL_CFTstrength_ValueChanged(object sender, EventArgs e)
+        {
+            Dict_fobject[Text_PropName.Text].Created = false;
+        }
+
+        private void Option_ConfigConti_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(Text_PropName.Text)) Dict_fobject[Text_PropName.Text].Created = false;
         }
     }
 

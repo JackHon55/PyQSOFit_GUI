@@ -25,13 +25,13 @@ from Spectra_handling.Spectrum_utls import skewed_voigt, blueshifting
 from PyQSOFit.Continuum import ContiFit
 from PyQSOFit.Lines import LineFit, LineProperties
 from scipy.stats import median_abs_deviation as mad
-from lmfit import minimize, Parameters, report_fit
 from extinction import fitzpatrick99, remove
 
 from PyAstronomy import pyasl
 from astropy.io import fits
 from astropy.cosmology import FlatLambdaCDM
 from astropy.table import Table
+import xml.etree.ElementTree as Et
 
 from scipy.ndimage import gaussian_filter as g_filt
 from rebin_spec import rebin_spec
@@ -432,6 +432,7 @@ class QSOFit:
         if CFT:
             self.host_decomposition = False
             self._apply_cft(CFT_smooth)
+            self.conti_result = None
 
         # do host decomposition --------------
         if self.z < 1.16 and self.host_decomposition:
@@ -932,6 +933,30 @@ class QSOFit:
                     print((properties[k] + '_err           ')[:15] + ':', '\t', np.round(print_errors[k], 5))
 
         return np.asarray([property_values.dict, property_values.err_dict])
+
+    def line_result_toXML(self, result_path=None):
+        xkeys = ['fwhm', 'sigma', 'skew', 'ew', 'peak', 'area']
+        root = Et.Element("spec", name=self.name)
+        for xline in self.lineobj.linelist:
+            name_id, err_id = self.line_errordata_read(xline['linename'])
+            if len(name_id) == 0:
+                continue
+
+            # Calculate values and errors for each property
+            property_values = LineProperties(self.wave, self.line_result[name_id], self.f_conti_model)
+            if self.MC:
+                property_values.line_error_calculate(name_id, err_id, self.line_result, self.conti_result)
+
+            linexml = Et.SubElement(root, "line", name=xline['linename'])
+            for nkeys in xkeys:
+                tmpxml = Et.SubElement(linexml, nkeys)
+                tmpxml.text = str(np.round(property_values.dict[nkeys], 5))
+                if self.MC:
+                    errxml = Et.SubElement(linexml, f"{nkeys}_err")
+                    errxml.text = str(np.round(property_values.err_dict[nkeys], 5))
+
+        tree = Et.ElementTree(root)
+        tree.write(result_path, encoding='utf-8', xml_declaration=True)
 
     @staticmethod
     def array_interlace(array1: np.array, array2: np.array) -> np.array:

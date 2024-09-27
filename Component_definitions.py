@@ -24,12 +24,14 @@ class ComponentsXmlReader:
 
     @staticmethod
     def xmlstr_to_float(xml) -> float:
-        # print(xml.text)
         return xml.text if xml.get('type') == 's' else float(xml.text)
 
     def skew_dict(self, xml) -> Tuple:
-        if xml.get('mode') == "Free" and self.xmlstr_to_float(xml) > 0:
-             return -1 * self.xmlstr_to_float(xml), self.xmlstr_to_float(xml)
+        if xml.get('mode') == "Free":
+            if self.xmlstr_to_float(xml) > 0:
+                return -1 * self.xmlstr_to_float(xml), self.xmlstr_to_float(xml)
+            else:
+                return -10, 10
         elif xml.get('mode') == "Fixed":
             return (self.xmlstr_to_float(xml), )
 
